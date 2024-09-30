@@ -8,7 +8,7 @@ handpose = ml5.handPose();
 }
 
 function setup(){
-createCanvas(innerWidth, innerHeight);
+createCanvas(640, 480);
 video = createCapture(VIDEO);
 video.size(640, 480);
 video.hide();
@@ -31,7 +31,7 @@ if(hands.length > 0){
 
 }
 
-function getHandsData(){
+function getHandsData(results){
 hands = results;
 
 }
