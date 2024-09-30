@@ -24,7 +24,7 @@ let handsMiddle = hand.middle_finger_mcp;
 
 noStroke();
 fill(0, 255, 255);
-ellipse(handsMiddle.x, handMiddle.y, 30);
+ellipse(handsMiddle.x, handsMiddle.y, 30);
 
 
     /* let indexFinger = hand.index_finger_tip;
