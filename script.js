@@ -8,9 +8,9 @@ handpose = ml5.handPose();
 }
 
 function setup(){
-createCanvas(640, 480);
+createCanvas(960, 720);
 video = createCapture(VIDEO);
-video.size(640, 480);
+video.size(960, 720);
 video.hide();
 
 handpose.detectStart(video, getHandsData);
