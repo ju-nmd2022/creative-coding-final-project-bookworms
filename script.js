@@ -20,7 +20,14 @@ function draw(){
 image(video, 0, 0);
 
 for(let hand of hands){
-    let indexFinger = hand.index_finger_tip;
+let handsMiddle = hand.middle_finger_mcp;
+
+noStroke();
+fill(0, 255, 255);
+ellipse(handsMiddle.x, handMiddle.y, 30);
+
+
+    /* let indexFinger = hand.index_finger_tip;
     let thumb = hand.thumb_tip;
 
     let centerX = (indexFinger.x + thumb.x) / 2;
@@ -30,7 +37,7 @@ for(let hand of hands){
 
     noStroke();
     fill(255, 0 , 255);
-    ellipse(centerX, centerY, distance);
+    ellipse(centerX, centerY, distance); */
 }
 
 /* if(hands.length > 0){
