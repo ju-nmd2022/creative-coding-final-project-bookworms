@@ -8,16 +8,21 @@ handpose = ml5.handPose();
 }
 
 function setup(){
-createCanvas(960, 720);
+createCanvas(windowWidth, windowHeight);
 video = createCapture(VIDEO);
-video.size(960, 720);
+video.size(windowWidth, windowHeight);
 video.hide();
 
 handpose.detectStart(video, getHandsData);
 }
 
 function draw(){
+push();
+translate(video.width, 0);
+scale(-1,1);
 image(video, 0, 0);
+
+background(0);
 
 for(let hand of hands){
 let handsMiddle = hand.middle_finger_mcp;
@@ -39,20 +44,47 @@ ellipse(handsMiddle.x, handsMiddle.y, 30);
     fill(255, 0 , 255);
     ellipse(centerX, centerY, distance); */
 }
+pop();
 
-/* if(hands.length > 0){
-    let indexFinger = hands[0].index_finger_tip;
-    let thumb = hands[0].thumb_tip;
-
-    fill(0,0,255);
-    ellipse(indexFinger.x, indexFinger.y, 10);
-    ellipse(thumb.x, thumb.y, 10);
-
-} */
+pathTriangle();
 
 }
 
 function getHandsData(results){
 hands = results;
 
+}
+
+function pathTriangle(){
+    fill(255,255,0);
+    rect(500,200, 50, 50);
+    rect(500, windowHeight - 200, 50, 50);
+
+    rect(windowWidth - 1000, 200, 50, 50);
+    rect(windowWidth - 1000, windowHeight - 200, 50, 50);
+    rect(windowWidth - 500, windowHeight/2, 50, 50);
+}
+
+function pathCircle(){
+    push();
+    fill(255, 255,0);
+    rect(500,200, 50, 50);
+    rect(500, windowHeight - 200, 50, 50);
+    pop();
+
+    noFill();
+    stroke(255,255,0)
+    strokeWeight(50);
+    ellipse(windowWidth - 800, windowHeight - 500, 750)
+
+}
+
+function pathLine(){
+    fill(255,255,0);
+
+    rect(500,200, 50, 50);
+    rect(500, windowHeight - 200, 50, 50);
+
+    rect(windowWidth - 500, 200, 50, 50);
+    rect(windowWidth - 500, windowHeight - 200, 50, 50);
 }
