@@ -14,6 +14,7 @@ function setup() {
 
   handpose.detectStart(video, getHandsData);
 
+  // the beat to follow
   Tone.start().then(() => {
     const synth = new Tone.PolySynth().toDestination();
 
