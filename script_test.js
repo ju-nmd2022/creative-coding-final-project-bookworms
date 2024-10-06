@@ -15,6 +15,10 @@ function setup() {
   handpose.detectStart(video, getHandsData);
 }
 
+/* function modelReady() {
+  console.log("Model is ready!");
+} */
+
 function draw() {
   push();
   translate(video.width, 0);
@@ -22,9 +26,9 @@ function draw() {
   image(video, 0, 0);
   background(0);
 
+  // Check hand positions
   for (let hand of hands) {
     let handsMiddle = hand.middle_finger_mcp;
-
     noStroke();
     fill(0, 255, 255);
     ellipse(handsMiddle.x, handsMiddle.y, 30);
@@ -34,6 +38,7 @@ function draw() {
   }
   pop();
 
+  // Draw rectangles
   pathTriangle();
 }
 
@@ -44,14 +49,14 @@ function getHandsData(results) {
 function pathTriangle() {
   fill(255, 255, 0, 50);
   noStroke();
-  //left hand
+
+  // Draw all rectangles
   rect(500, 200, 50, 50);
   rect(480, 180, 90, 90);
 
   rect(500, windowHeight - 200, 50, 50);
   rect(480, windowHeight - 220, 90, 90);
 
-  //right hand
   rect(windowWidth / 2, 200, 50, 50);
   rect(windowWidth / 2 - 20, 180, 90, 90);
 
@@ -64,7 +69,6 @@ function pathTriangle() {
 
 let points = 0;
 
-//The following 30 lines of code where conducted with the help of ChatGPT
 function checkHover(x, y) {
   // Define your rectangles (hardcoded values based on pathTriangle())
   let rects = [
@@ -90,41 +94,7 @@ function checkHover(x, y) {
     ) {
       points += 1;
       console.log(points);
+  
     }
   }
 }
-
-function pathCircle() {
-  push();
-  fill(255, 255, 0);
-  rect(500, 200, 50, 50);
-  rect(500, windowHeight - 200, 50, 50);
-  pop();
-
-  noFill();
-  stroke(255, 255, 0);
-  strokeWeight(50);
-  ellipse(windowWidth - 800, windowHeight - 500, 750);
-}
-
-function pathLine() {
-  fill(255, 255, 0);
-
-  rect(500, 200, 50, 50);
-  rect(500, windowHeight - 200, 50, 50);
-
-  rect(windowWidth - 500, 200, 50, 50);
-  rect(windowWidth - 500, windowHeight - 200, 50, 50);
-}
-
-/* let indexFinger = hand.index_finger_tip;
-    let thumb = hand.thumb_tip;
-
-    let centerX = (indexFinger.x + thumb.x) / 2;
-    let centerY = (indexFinger.y + thumb.y) / 2;
-
-    let distance = dist(indexFinger.x, indexFinger.y, thumb.x, thumb.y);
-
-    noStroke();
-    fill(255, 0 , 255);
-    ellipse(centerX, centerY, distance); */
