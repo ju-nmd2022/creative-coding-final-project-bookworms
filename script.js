@@ -17,12 +17,10 @@ function setup() {
   Tone.start().then(() => {
     const synth = new Tone.PolySynth().toDestination();
 
-    // Schedule a beat every quarter note
     Tone.Transport.scheduleRepeat((time) => {
-        synth.triggerAttackRelease('C3', '8n', time);  // Play a low-pitched sound
+        synth.triggerAttackRelease('C3', '8n', time);
     }, "2n");
 
-    // Start the transport
     Tone.Transport.start();
 
   });
