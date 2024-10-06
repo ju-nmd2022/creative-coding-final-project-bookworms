@@ -13,6 +13,19 @@ function setup() {
   video.hide();
 
   handpose.detectStart(video, getHandsData);
+
+  Tone.start().then(() => {
+    const synth = new Tone.PolySynth().toDestination();
+
+    // Schedule a beat every quarter note
+    Tone.Transport.scheduleRepeat((time) => {
+        synth.triggerAttackRelease('C3', '8n', time);  // Play a low-pitched sound
+    }, "2n");
+
+    // Start the transport
+    Tone.Transport.start();
+
+  });
 }
 
 function draw() {
@@ -89,8 +102,14 @@ function checkHover(x, y) {
       y < rect.y + rect.h
     ) {
       points += 1;
-      console.log(points);
+      console.log("points", points);
     }
+  }
+}
+
+function randomizScore(){
+  if(points > 1 && points < 10){
+    let randomValue = Math.floor(Math.random());
   }
 }
 
