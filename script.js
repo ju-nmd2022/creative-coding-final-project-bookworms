@@ -14,15 +14,16 @@ function setup() {
 
   handpose.detectStart(video, getHandsData);
 
-  // the beat to follow
-  Tone.start().then(() => {
-    const synth = new Tone.PolySynth().toDestination();
+ // the beat to follow
+ Tone.start().then(() => {
+  const synth = new Tone.PolySynth().toDestination();
 
-    Tone.Transport.scheduleRepeat(time => {
-      synth.triggerAttackRelease("C3", "8n", time);
+    Tone.Transport.scheduleRepeat((time) => {
+        synth.triggerAttackRelease('C3', '8n', time);
     }, "2n");
 
     Tone.Transport.start();
+
   });
 }
 
