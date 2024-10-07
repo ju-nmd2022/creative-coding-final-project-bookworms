@@ -18,12 +18,11 @@ function setup() {
   Tone.start().then(() => {
     const synth = new Tone.PolySynth().toDestination();
 
-    Tone.Transport.scheduleRepeat((time) => {
-        synth.triggerAttackRelease('C3', '8n', time);
+    Tone.Transport.scheduleRepeat(time => {
+      synth.triggerAttackRelease("C3", "8n", time);
     }, "2n");
 
     Tone.Transport.start();
-
   });
 }
 
@@ -75,6 +74,7 @@ function pathTriangle() {
 }
 
 let points = 0;
+let isTouchingRect = false; // Flag to check if the hand is currently touching a rectangle
 
 //The following 30 lines of code where conducted with the help of ChatGPT
 function checkHover(x, y) {
@@ -89,25 +89,33 @@ function checkHover(x, y) {
     { x: windowWidth / 2, y: windowHeight - 200, w: 50, h: 50 },
     { x: windowWidth / 2 - 20, y: windowHeight - 220, w: 90, h: 90 },
     { x: windowWidth - 500, y: windowHeight / 2, w: 50, h: 50 },
-    { x: windowWidth - 520, y: windowHeight / 2 - 20, w: 90, h: 90 },
+    { x: windowWidth - 520, y: windowHeight / 2 - 20, w: 90, h: 90 }
   ];
+
+  let touchingAnyRect = false; // Flag to check if the hand is over any rectangle
 
   // Check if hand is over any rectangle
   for (let rect of rects) {
-    if (
-      x > rect.x &&
-      x < rect.x + rect.w &&
-      y > rect.y &&
-      y < rect.y + rect.h
-    ) {
-      points += 1;
-      console.log("points", points);
+    if (x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h) {
+      /* points += 1;
+      console.log("points", points); */
+      touchingAnyRect = true;
+      break;
     }
+  }
+  // If the hand has just touched a rectangle, add one point
+  if (touchingAnyRect && !isTouchingRect) {
+    points += 1;
+    console.log("points", points);
+    isTouchingRect = true; // Set the flag to prevent further points until hand moves out
+  } else if (!touchingAnyRect && isTouchingRect) {
+    // If the hand is no longer touching any rectangle, reset the flag
+    isTouchingRect = false;
   }
 }
 
-function randomizScore(){
-  if(points > 1 && points < 10){
+function randomizScore() {
+  if (points > 1 && points < 10) {
     let randomValue = Math.floor(Math.random());
   }
 }
