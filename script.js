@@ -1,6 +1,8 @@
 let handpose;
 let video;
 let hands = [];
+let synth;
+let soundStarted = false;
 
 function preload() {
   handpose = ml5.handPose();
@@ -13,18 +15,6 @@ function setup() {
   video.hide();
 
   handpose.detectStart(video, getHandsData);
-
- // the beat to follow
- Tone.start().then(() => {
-  const synth = new Tone.PolySynth().toDestination();
-
-    Tone.Transport.scheduleRepeat((time) => {
-        synth.triggerAttackRelease('C3', '8n', time);
-    }, "2n");
-
-    Tone.Transport.start();
-
-  });
 }
 
 function draw() {
@@ -51,6 +41,27 @@ function draw() {
 
 function getHandsData(results) {
   hands = results;
+
+  if (hands.length > 0 && !soundStarted) {
+    soundStarted = true; // Set the flag to true to prevent restarting
+    startSound();
+  }
+}
+
+function startSound(){
+   // the beat to follow
+ Tone.start().then(() => {
+  synth = new Tone.PolySynth().toDestination();
+
+    Tone.Transport.scheduleRepeat((time) => {
+        synth.triggerAttackRelease('C3', '8n', time);
+    }, "2n");
+
+    Tone.Transport.start();
+
+  }).catch((error) => {
+    console.error("Failed to start Tone.js:", error);
+  });
 }
 
 function pathTriangle() {
