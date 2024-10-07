@@ -44,23 +44,25 @@ function draw() {
 function getHandsData(results) {
   hands = results;
 
-  if (hands.lenght > 0 && !soundStarted) {
-    soundStarted = true;
+  if (hands.length > 0 && !soundStarted) {
+    soundStarted = true; // Set the flag to true to prevent restarting
     startSound();
   }
 }
 
-function startSound() {
-  Tone.start().then(() => {
-    synth = new Tone.PolySynth().toDestination();
+function startSound(){
+   // the beat to follow
+ Tone.start().then(() => {
+  synth = new Tone.PolySynth().toDestination();
 
     Tone.Transport.scheduleRepeat((time) => {
-      synth.triggerAttackRelease("C3", "8n", time);
+        synth.triggerAttackRelease('C3', '8n', time);
     }, "2n");
 
     Tone.Transport.start();
+
   }).catch((error) => {
-    console.error("Failed to start Tone.js", error);
+    console.error("Failed to start Tone.js:", error);
   });
 }
 
