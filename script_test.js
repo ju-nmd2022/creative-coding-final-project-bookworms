@@ -13,11 +13,9 @@ function setup() {
   video.hide();
 
   handpose.detectStart(video, getHandsData);
-}
 
-/* function modelReady() {
-  console.log("Model is ready!");
-} */
+  weatherAPI();
+}
 
 function draw() {
   push();
@@ -81,20 +79,32 @@ function checkHover(x, y) {
     { x: windowWidth / 2, y: windowHeight - 200, w: 50, h: 50 },
     { x: windowWidth / 2 - 20, y: windowHeight - 220, w: 90, h: 90 },
     { x: windowWidth - 500, y: windowHeight / 2, w: 50, h: 50 },
-    { x: windowWidth - 520, y: windowHeight / 2 - 20, w: 90, h: 90 },
+    { x: windowWidth - 520, y: windowHeight / 2 - 20, w: 90, h: 90 }
   ];
 
   // Check if hand is over any rectangle
   for (let rect of rects) {
-    if (
-      x > rect.x &&
-      x < rect.x + rect.w &&
-      y > rect.y &&
-      y < rect.y + rect.h
-    ) {
+    if (x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h) {
       points += 1;
       console.log(points);
-  
     }
   }
+}
+
+function weatherAPI() {
+  const apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
+
+  fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was ok!");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.log("Error", error);
+    });
 }

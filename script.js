@@ -17,6 +17,8 @@ function setup() {
   video.hide();
 
   handpose.detectStart(video, getHandsData);
+
+  weatherAPI();
 }
 
 function draw() {
@@ -50,20 +52,21 @@ function getHandsData(results) {
   }
 }
 
-function startSound(){
-   // the beat to follow
- Tone.start().then(() => {
-  synth = new Tone.PolySynth().toDestination();
+function startSound() {
+  // the beat to follow
+  Tone.start()
+    .then(() => {
+      synth = new Tone.PolySynth().toDestination();
 
-    Tone.Transport.scheduleRepeat((time) => {
-        synth.triggerAttackRelease('C3', '8n', time);
-    }, "2n");
+      Tone.Transport.scheduleRepeat(time => {
+        synth.triggerAttackRelease("C3", "8n", time);
+      }, "2n");
 
-    Tone.Transport.start();
-
-  }).catch((error) => {
-    console.error("Failed to start Tone.js:", error);
-  });
+      Tone.Transport.start();
+    })
+    .catch(error => {
+      console.error("Failed to start Tone.js:", error);
+    });
 }
 
 function pathTriangle() {
@@ -75,10 +78,9 @@ function pathTriangle() {
 
   //right hand
   rect(windowWidth / 2, 200, 70, 70);
-  rect(windowWidth / 2, windowHeight - 200,70, 70);
+  rect(windowWidth / 2, windowHeight - 200, 70, 70);
   rect(windowWidth - 500, windowHeight / 2, 70, 70);
 }
-
 
 // The following 30 lines of code where conducted with the help of ChatGPT
 function checkHover(x, y) {
@@ -95,10 +97,9 @@ function checkHover(x, y) {
     let touchingRect = x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
 
     if (x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h && !rect.isTouching) {
-    
       points += 1;
       console.log("points", points);
-      rect.isTouching = true; 
+      rect.isTouching = true;
     } else if (!touchingRect && rect.isTouching) {
       rect.isTouching = false;
     }
@@ -134,15 +135,28 @@ function pathLine() {
   rect(windowWidth - 500, windowHeight - 200, 50, 50);
 }
 
-//artworks 
-function flowfield(){
+//The following 16 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
+function weatherAPI() {
+  const apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
 
+  fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was ok!");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.log("Error", error);
+    });
 }
 
-function noise(){
+//artworks
+function flowfield() {}
 
-}
+function noise() {}
 
-function pixels(){
-
-}
+function pixels() {}
