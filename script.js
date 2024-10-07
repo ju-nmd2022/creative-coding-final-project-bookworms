@@ -134,3 +134,15 @@ function pathLine() {
   rect(windowWidth - 500, windowHeight - 200, 50, 50);
 }
 
+//artworks 
+function flowfield(){
+
+}
+
+function noise(){
+
+}
+
+function pixels(){
+
+}
