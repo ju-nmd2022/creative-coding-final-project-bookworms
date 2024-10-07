@@ -1,14 +1,10 @@
 let handpose;
 let video;
 let hands = [];
-<<<<<<< Updated upstream
+let points = 0;
+let rects = [];
 let synth;
 let soundStarted = false;
-=======
-let points = 0;
-
-let rects = [];
->>>>>>> Stashed changes
 
 function preload() {
   handpose = ml5.handPose();
@@ -20,24 +16,7 @@ function setup() {
   video.size(windowWidth, windowHeight);
   video.hide();
 
-  
-
   handpose.detectStart(video, getHandsData);
-<<<<<<< Updated upstream
-=======
-
- the beat to follow
- Tone.start().then(() => {
-  const synth = new Tone.PolySynth().toDestination();
-
-    Tone.Transport.scheduleRepeat((time) => {
-        synth.triggerAttackRelease('C3', '8n', time);
-    }, "2n");
-
-    Tone.Transport.start();
-
-  });
->>>>>>> Stashed changes
 }
 
 function draw() {
@@ -65,25 +44,23 @@ function draw() {
 function getHandsData(results) {
   hands = results;
 
-  if (hands.length > 0 && !soundStarted) {
-    soundStarted = true; // Set the flag to true to prevent restarting
+  if (hands.lenght > 0 && !soundStarted) {
+    soundStarted = true;
     startSound();
   }
 }
 
-function startSound(){
-   // the beat to follow
- Tone.start().then(() => {
-  synth = new Tone.PolySynth().toDestination();
+function startSound() {
+  Tone.start().then(() => {
+    synth = new Tone.PolySynth().toDestination();
 
     Tone.Transport.scheduleRepeat((time) => {
-        synth.triggerAttackRelease('C3', '8n', time);
+      synth.triggerAttackRelease("C3", "8n", time);
     }, "2n");
 
     Tone.Transport.start();
-
   }).catch((error) => {
-    console.error("Failed to start Tone.js:", error);
+    console.error("Failed to start Tone.js", error);
   });
 }
 
