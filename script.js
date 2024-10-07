@@ -53,64 +53,47 @@ function getHandsData(results) {
 }
 
 function pathTriangle() {
-  fill(255, 255, 0, 50);
+  fill(255, 255, 0, 150);
   noStroke();
   //left hand
   rect(500, 200, 50, 50);
-  rect(480, 180, 90, 90);
 
   rect(500, windowHeight - 200, 50, 50);
-  rect(480, windowHeight - 220, 90, 90);
 
   //right hand
   rect(windowWidth / 2, 200, 50, 50);
-  rect(windowWidth / 2 - 20, 180, 90, 90);
 
   rect(windowWidth / 2, windowHeight - 200, 50, 50);
-  rect(windowWidth / 2 - 20, windowHeight - 220, 90, 90);
 
   rect(windowWidth - 500, windowHeight / 2, 50, 50);
-  rect(windowWidth - 520, windowHeight / 2 - 20, 90, 90);
 }
 
 let points = 0;
-let isTouchingRect = false; // Flag to check if the hand is currently touching a rectangle
 
-//The following 30 lines of code where conducted with the help of ChatGPT
+// The following 30 lines of code where conducted with the help of ChatGPT
 function checkHover(x, y) {
   // Define your rectangles (hardcoded values based on pathTriangle())
   let rects = [
-    { x: 500, y: 200, w: 50, h: 50 },
-    { x: 480, y: 180, w: 90, h: 90 },
-    { x: 500, y: windowHeight - 200, w: 50, h: 50 },
-    { x: 480, y: windowHeight - 220, w: 90, h: 90 },
-    { x: windowWidth / 2, y: 200, w: 50, h: 50 },
-    { x: windowWidth / 2 - 20, y: 180, w: 90, h: 90 },
-    { x: windowWidth / 2, y: windowHeight - 200, w: 50, h: 50 },
-    { x: windowWidth / 2 - 20, y: windowHeight - 220, w: 90, h: 90 },
-    { x: windowWidth - 500, y: windowHeight / 2, w: 50, h: 50 },
-    { x: windowWidth - 520, y: windowHeight / 2 - 20, w: 90, h: 90 }
+    { x: 500, y: 200, w: 50, h: 50, isTouching: false },
+    { x: 500, y: windowHeight - 200, w: 50, h: 50, isTouching: false },
+    { x: windowWidth / 2, y: 200, w: 50, h: 50, isTouching: false },
+    { x: windowWidth / 2, y: windowHeight - 200, w: 50, h: 50, isTouching: false },
+    { x: windowWidth - 500, y: windowHeight / 2, w: 50, h: 50, isTouching: false }
   ];
 
-  let touchingAnyRect = false; // Flag to check if the hand is over any rectangle
-
-  // Check if hand is over any rectangle
+  //Check if hand is over the rectangle
   for (let rect of rects) {
-    if (x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h) {
-      /* points += 1;
-      console.log("points", points); */
-      touchingAnyRect = true;
-      break;
+    let touchingRect = x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
+
+    // If the hand just touched this specific rectangle, add a point
+    if (touchingRect && !rect.isTouching) {
+      points += 1;
+      console.log("points", points);
+      rect.isTouching = true; // Mark that this rectangle has been touched
+    } else if (!touchingRect && rect.isTouching) {
+      // If the hand is no longer touching this rectangle, reset the flag
+      rect.isTouching = false;
     }
-  }
-  // If the hand has just touched a rectangle, add one point
-  if (touchingAnyRect && !isTouchingRect) {
-    points += 1;
-    console.log("points", points);
-    isTouchingRect = true; // Set the flag to prevent further points until hand moves out
-  } else if (!touchingAnyRect && isTouchingRect) {
-    // If the hand is no longer touching any rectangle, reset the flag
-    isTouchingRect = false;
   }
 }
 
