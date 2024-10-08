@@ -46,20 +46,9 @@ function draw() {
   }
   pop();
 
+  // if statement for what kind of artwork gets displayed
   if(points > 20){
-    for(let agent of agents){
-      const x = Math.floor(agent.position.x / fieldSize);
-      const y = Math.floor(agent.position.y / fieldSize);
-
-      if (x >= 0 && x < maxCols && y >= 0 && y < maxRows) {
-          const desiredDirection = field[x][y];
-          agent.follow(desiredDirection);
-      }
-      
-      agent.update();
-      agent.checkBorders();
-      agent.draw();
-    }
+    flowfield();
   } else if (points > 20){
     noise();
   }
@@ -269,6 +258,21 @@ const divider = 4;
 let field;
 let agents = [];
 
+function flowfield(){
+  for(let agent of agents){
+    const x = Math.floor(agent.position.x / fieldSize);
+    const y = Math.floor(agent.position.y / fieldSize);
+
+    if (x >= 0 && x < maxCols && y >= 0 && y < maxRows) {
+        const desiredDirection = field[x][y];
+        agent.follow(desiredDirection);
+    }
+    
+    agent.update();
+    agent.checkBorders();
+    agent.draw();
+  }
+}
 
 // noise artwork
 function noise() {
