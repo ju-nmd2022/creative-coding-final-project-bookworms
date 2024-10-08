@@ -178,57 +178,57 @@ let agents = [];
 
 class Agent {
   constructor(x, y, maxSpeed, maxForce){
-      this.position = createVector(x, y);
-      this.lastPosition = createVector(x, y);
-      this.acceleration = createVector(0, 0);
-      this.velocity = createVector(0, 0);
-      this.maxSpeed = maxSpeed;
-      this.maxForce = maxForce;
+    this.position = createVector(x, y);
+    this.lastPosition = createVector(x, y);
+    this.acceleration = createVector(0, 0);
+    this.velocity = createVector(0, 0);
+    this.maxSpeed = maxSpeed;
+    this.maxForce = maxForce;
   }
 
   follow(desiredDirection){
-      desiredDirection = desiredDirection.copy();
-      desiredDirection.mult(this.maxSpeed);
-      let steer = p5.Vector.sub(desiredDirection, this.velocity);
-      steer.limit(this.maxForce);
-      this.applyForce(steer);
+    desiredDirection = desiredDirection.copy();
+    desiredDirection.mult(this.maxSpeed);
+    let steer = p5.Vector.sub(desiredDirection, this.velocity);
+    steer.limit(this.maxForce);
+    this.applyForce(steer);
   }
 
   applyForce(force){
-      this.acceleration.add(force);
+    this.acceleration.add(force);
   }
 
   update(){
-      this.lastPosition = this.position.copy();
-      this.velocity.add(this.acceleration);
-      this.position.add(this.velocity);
-      this.acceleration.mult(0);
+    this.lastPosition = this.position.copy();
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0);
   }
 
   checkBorders(){
-      if(this.position.x < 0){
-          this.position.x = innerWidth;
-          this.lastPosition.x = innerWidth;
-      } else if(this.position.x >innerWidth){
-          this.position.x = 0;
-          this.lastPosition.x = 0;
-      }
+    if(this.position.x < 0){
+      this.position.x = innerWidth;
+      this.lastPosition.x = innerWidth;
+    } else if(this.position.x >innerWidth){
+      this.position.x = 0;
+      this.lastPosition.x = 0;
+    }
 
-      if(this.position.y < 0){
-          this.position.y = innerHeight;
-          this.lastPosition.y = innerHeight;
-      } else if(this.position.y >innerHeight){
-          this.position.y = 0;
-          this.lastPosition.y = 0;
-      }
+    if(this.position.y < 0){
+      this.position.y = innerHeight;
+      this.lastPosition.y = innerHeight;
+    } else if(this.position.y >innerHeight){
+      this.position.y = 0;
+      this.lastPosition.y = 0;
+    }
   }
 
   draw(){
-      push();
-      stroke(0, 0, 0, 40);
-      strokeWeight(1.5);
-      line(this.lastPosition.x, this.lastPosition.y, this.position.x, this.position.y);
-      pop();
+    push();
+    stroke(0, 0, 0, 40);
+    strokeWeight(1.5);
+    line(this.lastPosition.x, this.lastPosition.y, this.position.x, this.position.y);
+    pop();
   }
 }
 
@@ -248,13 +248,13 @@ function generateField(){
 
 function generateAgents(){
   for(let i = 0; i < 500; i++){
-      let agent = new Agent(
-          Math.random() * innerWidth,
-          Math.random() * innerHeight,
-          2,
-          0.3
-      );
-      agents.push(agent);
+    let agent = new Agent(
+      Math.random() * innerWidth,
+      Math.random() * innerHeight,
+      2,
+      0.3
+    );
+    agents.push(agent);
   }
 }
 
@@ -264,8 +264,8 @@ function flowfield(){
     const y = Math.floor(agent.position.y / fieldSizeFlowfield);
 
     if (x >= 0 && x < maxColsFlowfield && y >= 0 && y < maxRowsFlowfield) {
-        const desiredDirection = flowfield[x][y];
-        agent.follow(desiredDirection);
+      const desiredDirection = flowfield[x][y];
+      agent.follow(desiredDirection);
     }
     
     agent.update();
@@ -288,10 +288,10 @@ function noise() {
 
   for(let y = 0; y < numRowsNoise; y++){
     for(let x = 0; x < numColsNoise; x++){
-        const c = noise(x / dividerNoise, y / dividerNoise) * 100;
-        const value = noise(x / dividerNoise, y / dividerNoise) * sizeNoise;
-        fill(c, 100, 80);
-        ellipse(sizeNoise / 2 + x * sizeNoise, sizeNoise / 2 + y * sizeNoise, value);
+      const c = noise(x / dividerNoise, y / dividerNoise) * 100;
+      const value = noise(x / dividerNoise, y / dividerNoise) * sizeNoise;
+      fill(c, 100, 80);
+      ellipse(sizeNoise / 2 + x * sizeNoise, sizeNoise / 2 + y * sizeNoise, value);
     }
   }
 
