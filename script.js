@@ -169,6 +169,13 @@ function weatherAPI() {
 
 //artworks
 // flowfield artwork
+const fieldSizeFlowfield = 10;
+const maxColsFlowfield = Math.ceil(innerWidth / fieldSize);
+const maxRowsFlowfield = Math.ceil(innerHeight / fieldSize);
+const dividerFlowfield = 4;
+let flowfield;
+let agents = [];
+
 class Agent {
   constructor(x, y, maxSpeed, maxForce){
       this.position = createVector(x, y);
@@ -226,17 +233,17 @@ class Agent {
 }
 
 function generateField(){
-  let field = [];
+  let flowfield = [];
   noiseSeed(Math.random() * 100);
-  for(let x = 0; x < maxCols; x++){
-      field.push([]);
-      for(let y = 0; y < maxRows; y++){
-          const  value = noise(x / divider, y / divider) * Math.PI * 2;
-          field[x].push(p5.Vector.fromAngle(value));
+  for(let x = 0; x < maxColsFlowfield; x++){
+      flowfield.push([]);
+      for(let y = 0; y < maxRowsFlowfield; y++){
+          const  value = noise(x / dividerFlowfield, y / dividerFlowfield) * Math.PI * 2;
+          flowfield[x].push(p5.Vector.fromAngle(value));
       }
   }
 
-  return field;
+  return flowfield;
 }
 
 function generateAgents(){
@@ -251,20 +258,13 @@ function generateAgents(){
   }
 }
 
-const fieldSize = 10;
-const maxCols = Math.ceil(innerWidth / fieldSize);
-const maxRows = Math.ceil(innerHeight / fieldSize);
-const divider = 4;
-let field;
-let agents = [];
-
 function flowfield(){
   for(let agent of agents){
-    const x = Math.floor(agent.position.x / fieldSize);
-    const y = Math.floor(agent.position.y / fieldSize);
+    const x = Math.floor(agent.position.x / fieldSizeFlowfield);
+    const y = Math.floor(agent.position.y / fieldSizeFlowfield);
 
-    if (x >= 0 && x < maxCols && y >= 0 && y < maxRows) {
-        const desiredDirection = field[x][y];
+    if (x >= 0 && x < maxColsFlowfield && y >= 0 && y < maxRowsFlowfield) {
+        const desiredDirection = flowfield[x][y];
         agent.follow(desiredDirection);
     }
     
@@ -275,28 +275,26 @@ function flowfield(){
 }
 
 // noise artwork
-function noise() {
-  const size = 10;
-  const divider = 25;
-  const numRows = 60;
-  const numCols = 60;
+const sizeNoise = 10;
+const dividerNoise = 25;
+const numRowsNoise = 60;
+const numColsNoise = 60;
 
+function noise() {
   background(255);
   noStroke();
   fill(0);
   colorMode(HSB, 100);
 
-  for(let y = 0; y < numRows; y++){
-    for(let x = 0; x < numCols; x++){
-        const c = noise(x / divider, y / divider) * 100;
-        const value = noise(x / divider, y / divider) * size;
+  for(let y = 0; y < numRowsNoise; y++){
+    for(let x = 0; x < numColsNoise; x++){
+        const c = noise(x / dividerNoise, y / dividerNoise) * 100;
+        const value = noise(x / dividerNoise, y / dividerNoise) * sizeNoise;
         fill(c, 100, 80);
-        ellipse(size / 2 + x * size, size / 2 + y * size, value);
+        ellipse(sizeNoise / 2 + x * sizeNoise, sizeNoise / 2 + y * sizeNoise, value);
     }
   }
 
-
-  //will only draw it once
   noLoop();
 }
 
