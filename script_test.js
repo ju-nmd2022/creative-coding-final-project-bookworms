@@ -65,31 +65,41 @@ function pathTriangle() {
   rect(windowWidth - 520, windowHeight / 2 - 20, 90, 90);
 }
 
+// Initialize points and rectangles outside the function so they persist
+// Initialize points and rectangles outside the function so they persist
 let points = 0;
 
-function checkHover(x, y) {
-  // Define your rectangles (hardcoded values based on pathTriangle())
-  let rects = [
-    { x: 500, y: 200, w: 50, h: 50 },
-    { x: 480, y: 180, w: 90, h: 90 },
-    { x: 500, y: windowHeight - 200, w: 50, h: 50 },
-    { x: 480, y: windowHeight - 220, w: 90, h: 90 },
-    { x: windowWidth / 2, y: 200, w: 50, h: 50 },
-    { x: windowWidth / 2 - 20, y: 180, w: 90, h: 90 },
-    { x: windowWidth / 2, y: windowHeight - 200, w: 50, h: 50 },
-    { x: windowWidth / 2 - 20, y: windowHeight - 220, w: 90, h: 90 },
-    { x: windowWidth - 500, y: windowHeight / 2, w: 50, h: 50 },
-    { x: windowWidth - 520, y: windowHeight / 2 - 20, w: 90, h: 90 }
-  ];
+// Log window dimensions
+console.log("Window dimensions:", window.innerWidth, window.innerHeight);
 
-  // Check if hand is over any rectangle
+let rects = [
+  { x: 500, y: 200, w: 70, h: 70, isTouching: false },
+  { x: 500, y: window.innerHeight - 200, w: 70, h: 70, isTouching: false },
+  { x: window.innerWidth / 2, y: 200, w: 70, h: 70, isTouching: false },
+  { x: window.innerWidth / 2, y: window.innerHeight - 200, w: 70, h: 70, isTouching: false },
+  { x: window.innerWidth - 500, y: window.innerHeight / 2, w: 70, h: 70, isTouching: false }
+];
+
+// Log the rectangle positions and sizes
+rects.forEach((rect, index) => {
+  console.log(`Rectangle ${index + 1}:`, rect);
+});
+
+function checkHover(x, y) {
   for (let rect of rects) {
-    if (x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h) {
+    let touchingRect = x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
+
+    if (touchingRect && !rect.isTouching) {
       points += 1;
-      console.log(points);
+      console.log("points", points);
+      rect.isTouching = true;
+    } else if (!touchingRect && rect.isTouching) {
+      rect.isTouching = false;
     }
   }
 }
+
+
 
 function weatherAPI() {
   const apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";

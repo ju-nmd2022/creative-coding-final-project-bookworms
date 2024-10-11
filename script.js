@@ -95,21 +95,28 @@ function pathTriangle() {
   rect(windowWidth - 500, windowHeight / 2, 70, 70);
 }
 
-// The following 30 lines of code where conducted with the help of ChatGPT
-function checkHover(x, y) {
-  rects = [
-    { x: 500, y: 200, w: 70, h: 70, isTouching: false },
-    { x: 500, y: windowHeight - 200, w: 70, h: 70, isTouching: false },
-    { x: windowWidth / 2, y: 200, w: 70, h: 70, isTouching: false },
-    { x: windowWidth / 2, y: windowHeight - 200, w: 70, h: 70, isTouching: false },
-    { x: windowWidth - 500, y: windowHeight / 2, w: 70, h: 70, isTouching: false }
-  ];
 
-  //Check if hand is over the rectangle
+// Log window dimensions
+console.log("Window dimensions:", window.innerWidth, window.innerHeight);
+
+rects = [
+  { x: 500, y: 200, w: 70, h: 70, isTouching: false },
+  { x: 500, y: window.innerHeight - 200, w: 70, h: 70, isTouching: false },
+  { x: window.innerWidth / 2, y: 200, w: 70, h: 70, isTouching: false },
+  { x: window.innerWidth / 2, y: window.innerHeight - 200, w: 70, h: 70, isTouching: false },
+  { x: window.innerWidth - 500, y: window.innerHeight / 2, w: 70, h: 70, isTouching: false }
+];
+
+// Log the rectangle positions and sizes
+rects.forEach((rect, index) => {
+  console.log(`Rectangle ${index + 1}:`, rect);
+});
+
+function checkHover(x, y) {
   for (let rect of rects) {
     let touchingRect = x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
 
-    if (x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h && !rect.isTouching) {
+    if (touchingRect && !rect.isTouching) {
       points += 1;
       console.log("points", points);
       rect.isTouching = true;
@@ -118,6 +125,7 @@ function checkHover(x, y) {
     }
   }
 }
+
 
 function randomizeScore() {
   if (points > 1 && points < 10) {
