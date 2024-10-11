@@ -128,8 +128,10 @@ function checkHover(x, y) {
 
 
 function randomizeScore() {
-  if (points > 1 && points < 10) {
+  if (points > 1 && points < 15) {
     let randomValue = Math.floor(Math.random());
+  } else if (points > 15 && points < 30){
+    let randomValue = Math.floor(Math.random() * 20 + 10)
   }
 }
 
