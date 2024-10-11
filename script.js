@@ -2,7 +2,13 @@ let handpose;
 let video;
 let hands = [];
 let points = 0;
-let rects = [];
+let rects = [
+  { x: 500, y: 200, w: 70, h: 70, isTouching: false },
+  { x: 500, y: 600, w: 70, h: 70, isTouching: false },
+  { x: 750, y: 200, w: 70, h: 70, isTouching: false },
+  { x: 750, y: 600, w: 70, h: 70, isTouching: false },
+  { x: 950, y: 400, w: 70, h: 70, isTouching: false },
+];
 let synth;
 let soundStarted = false;
 
@@ -20,7 +26,7 @@ function setup() {
 
   weatherAPI();
 
-  if(points > 20){
+  if (points > 20) {
     background(255, 255, 255);
     field = generateField();
     generateAgents();
@@ -47,11 +53,11 @@ function draw() {
   pop();
 
   // if statement for what kind of artwork gets displayed
-  if(points > 20){
+ /*  if (points > 20) {
     flowfieldArtwork();
-  } else if (points > 20){
+  } else if (points > 20) {
     noise();
-  }
+  } */
 
   pathTriangle();
 }
@@ -71,13 +77,13 @@ function startSound() {
     .then(() => {
       synth = new Tone.PolySynth().toDestination();
 
-      Tone.Transport.scheduleRepeat(time => {
+      Tone.Transport.scheduleRepeat((time) => {
         synth.triggerAttackRelease("C3", "8n", time);
       }, "2n");
 
       Tone.Transport.start();
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Failed to start Tone.js:", error);
     });
 }
@@ -87,25 +93,16 @@ function pathTriangle() {
   noStroke();
   //left hand
   rect(500, 200, 70, 70);
-  rect(500, windowHeight - 200, 70, 70);
+  rect(500, 600, 70, 70);
 
   //right hand
-  rect(windowWidth / 2, 200, 70, 70);
-  rect(windowWidth / 2, windowHeight - 200, 70, 70);
-  rect(windowWidth - 500, windowHeight / 2, 70, 70);
+  rect(750, 200, 70, 70);
+  rect(750, 600, 70, 70);
+  rect(950, 400, 70, 70);
 }
-
 
 // Log window dimensions
 console.log("Window dimensions:", window.innerWidth, window.innerHeight);
-
-rects = [
-  { x: 500, y: 200, w: 70, h: 70, isTouching: false },
-  { x: 500, y: window.innerHeight - 200, w: 70, h: 70, isTouching: false },
-  { x: window.innerWidth / 2, y: 200, w: 70, h: 70, isTouching: false },
-  { x: window.innerWidth / 2, y: window.innerHeight - 200, w: 70, h: 70, isTouching: false },
-  { x: window.innerWidth - 500, y: window.innerHeight / 2, w: 70, h: 70, isTouching: false }
-];
 
 // Log the rectangle positions and sizes
 rects.forEach((rect, index) => {
@@ -114,7 +111,8 @@ rects.forEach((rect, index) => {
 
 function checkHover(x, y) {
   for (let rect of rects) {
-    let touchingRect = x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
+    let touchingRect =
+      x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
 
     if (touchingRect && !rect.isTouching) {
       points += 1;
@@ -125,7 +123,6 @@ function checkHover(x, y) {
     }
   }
 }
-
 
 function randomizeScore() {
   if (points > 1 && points < 10) {
@@ -158,34 +155,35 @@ function pathLine() {
 
 //The following 16 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
 function weatherAPI() {
-  const apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
+  const apiUrl =
+    "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
 
   fetch(apiUrl)
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was ok!");
       }
       return response.json();
     })
-    .then(data => {
+    .then((data) => {
       console.log(data);
     })
-    .catch(error => {
+    .catch((error) => {
       console.log("Error", error);
     });
 }
 
 //artworks
 // flowfield artwork
-const fieldSizeFlowfield = 10;
-const maxColsFlowfield = Math.ceil(innerWidth / fieldSize);
+/* const fieldSizeFlowfield = 10;
+const maxColsFlowfield = Math.ceil(innerWidth / fieldSize); 
 const maxRowsFlowfield = Math.ceil(innerHeight / fieldSize);
 const dividerFlowfield = 4;
 let flowfield;
 let agents = [];
 
 class Agent {
-  constructor(x, y, maxSpeed, maxForce){
+  constructor(x, y, maxSpeed, maxForce) {
     this.position = createVector(x, y);
     this.lastPosition = createVector(x, y);
     this.acceleration = createVector(0, 0);
@@ -194,7 +192,7 @@ class Agent {
     this.maxForce = maxForce;
   }
 
-  follow(desiredDirection){
+  follow(desiredDirection) {
     desiredDirection = desiredDirection.copy();
     desiredDirection.mult(this.maxSpeed);
     let steer = p5.Vector.sub(desiredDirection, this.velocity);
@@ -202,60 +200,66 @@ class Agent {
     this.applyForce(steer);
   }
 
-  applyForce(force){
+  applyForce(force) {
     this.acceleration.add(force);
   }
 
-  update(){
+  update() {
     this.lastPosition = this.position.copy();
     this.velocity.add(this.acceleration);
     this.position.add(this.velocity);
     this.acceleration.mult(0);
   }
 
-  checkBorders(){
-    if(this.position.x < 0){
+  checkBorders() {
+    if (this.position.x < 0) {
       this.position.x = innerWidth;
       this.lastPosition.x = innerWidth;
-    } else if(this.position.x >innerWidth){
+    } else if (this.position.x > innerWidth) {
       this.position.x = 0;
       this.lastPosition.x = 0;
     }
 
-    if(this.position.y < 0){
+    if (this.position.y < 0) {
       this.position.y = innerHeight;
       this.lastPosition.y = innerHeight;
-    } else if(this.position.y >innerHeight){
+    } else if (this.position.y > innerHeight) {
       this.position.y = 0;
       this.lastPosition.y = 0;
     }
   }
 
-  draw(){
+  draw() {
     push();
     stroke(0, 0, 0, 40);
     strokeWeight(1.5);
-    line(this.lastPosition.x, this.lastPosition.y, this.position.x, this.position.y);
+    line(
+      this.lastPosition.x,
+      this.lastPosition.y,
+      this.position.x,
+      this.position.y
+    );
     pop();
   }
 }
 
-function generateField(){
+function generateField() {
   let flowfield = [];
   noiseSeed(Math.random() * 100);
-  for(let x = 0; x < maxColsFlowfield; x++){
-      flowfield.push([]);
-      for(let y = 0; y < maxRowsFlowfield; y++){
-          const  value = noise(x / dividerFlowfield, y / dividerFlowfield) * Math.PI * 2;
-          flowfield[x].push(p5.Vector.fromAngle(value));
-      }
+  for (let x = 0; x < maxColsFlowfield; x++) {
+    flowfield.push([]);
+    for (let y = 0; y < maxRowsFlowfield; y++) {
+      const value =
+        noise(x / dividerFlowfield, y / dividerFlowfield) * Math.PI * 2;
+      flowfield[x].push(p5.Vector.fromAngle(value));
+    }
   }
 
   return flowfield;
 }
 
-function generateAgents(){
-  for(let i = 0; i < 500; i++){
+function generateAgents() {
+  for (let i = 0; i < 500; i++) {
     let agent = new Agent(
       Math.random() * innerWidth,
       Math.random() * innerHeight,
@@ -266,8 +270,8 @@ function generateAgents(){
   }
 }
 
-function flowfieldArtwork(){
-  for(let agent of agents){
+function flowfieldArtwork() {
+  for (let agent of agents) {
     const x = Math.floor(agent.position.x / fieldSizeFlowfield);
     const y = Math.floor(agent.position.y / fieldSizeFlowfield);
 
@@ -275,7 +279,7 @@ function flowfieldArtwork(){
       const desiredDirection = flowfield[x][y];
       agent.follow(desiredDirection);
     }
-    
+
     agent.update();
     agent.checkBorders();
     agent.draw();
@@ -294,16 +298,20 @@ function noise() {
   fill(0);
   colorMode(HSB, 100);
 
-  for(let y = 0; y < numRowsNoise; y++){
-    for(let x = 0; x < numColsNoise; x++){
+  for (let y = 0; y < numRowsNoise; y++) {
+    for (let x = 0; x < numColsNoise; x++) {
       const c = noise(x / dividerNoise, y / dividerNoise) * 100;
       const value = noise(x / dividerNoise, y / dividerNoise) * sizeNoise;
       fill(c, 100, 80);
-      ellipse(sizeNoise / 2 + x * sizeNoise, sizeNoise / 2 + y * sizeNoise, value);
+      ellipse(
+        sizeNoise / 2 + x * sizeNoise,
+        sizeNoise / 2 + y * sizeNoise,
+        value
+      );
     }
   }
 
   noLoop();
 }
 
-function pixels() {}
+function pixels() {} */
