@@ -50,16 +50,15 @@ function draw() {
     // Check if the hand is hovering over any of the rectangles
     checkHover(handsMiddle.x, handsMiddle.y);
   }
+  pathTriangle();
   pop();
 
   // if statement for what kind of artwork gets displayed : changing this to mood when we have created a function deciding mood
-  if(points > 20){
+  if (points > 20) {
     flowfieldArtwork();
   } else if (points > 20) {
     noise();
-  } 
-
-  pathTriangle();
+  }
 }
 
 function getHandsData(results) {
@@ -127,8 +126,8 @@ function checkHover(x, y) {
 function randomizeScore() {
   if (points > 1 && points < 15) {
     let randomValue = Math.floor(Math.random());
-  } else if (points > 15 && points < 30){
-    let randomValue = Math.floor(Math.random() * 20 + 10)
+  } else if (points > 15 && points < 30) {
+    let randomValue = Math.floor(Math.random() * 20 + 10);
   }
 }
 
@@ -316,4 +315,4 @@ function noise() {
   noLoop();
 }
 
-function pixels() {} 
+function pixels() {}
