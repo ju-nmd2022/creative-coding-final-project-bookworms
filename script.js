@@ -48,7 +48,7 @@ function draw() {
 
   // if statement for what kind of artwork gets displayed
   if(points > 20){
-    flowfield();
+    flowfieldArtwork();
   } else if (points > 20){
     noise();
   }
@@ -266,7 +266,7 @@ function generateAgents(){
   }
 }
 
-function flowfield(){
+function flowfieldArtwork(){
   for(let agent of agents){
     const x = Math.floor(agent.position.x / fieldSizeFlowfield);
     const y = Math.floor(agent.position.y / fieldSizeFlowfield);
