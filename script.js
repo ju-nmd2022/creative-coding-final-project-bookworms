@@ -46,7 +46,7 @@ function draw() {
   }
   pop();
 
-  // if statement for what kind of artwork gets displayed
+  // if statement for what kind of artwork gets displayed : changing this to mood when we have created a function deciding mood
   if(points > 20){
     flowfieldArtwork();
   } else if (points > 20){
@@ -60,7 +60,7 @@ function getHandsData(results) {
   hands = results;
 
   if (hands.length > 0 && !soundStarted) {
-    soundStarted = true; // Set the flag to true to prevent restarting
+    soundStarted = true;
     startSound();
   }
 }
@@ -94,7 +94,6 @@ function pathTriangle() {
   rect(windowWidth / 2, windowHeight - 200, 70, 70);
   rect(windowWidth - 500, windowHeight / 2, 70, 70);
 }
-
 
 // Log window dimensions
 console.log("Window dimensions:", window.innerWidth, window.innerHeight);
