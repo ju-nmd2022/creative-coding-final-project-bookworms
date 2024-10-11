@@ -3,11 +3,11 @@ let video;
 let hands = [];
 let points = 0;
 let rects = [
-  { x: 500, y: 200, w: 70, h: 70, isTouching: false },
-  { x: 500, y: 600, w: 70, h: 70, isTouching: false },
   { x: 750, y: 200, w: 70, h: 70, isTouching: false },
   { x: 750, y: 600, w: 70, h: 70, isTouching: false },
-  { x: 950, y: 400, w: 70, h: 70, isTouching: false },
+  { x: 500, y: 400, w: 70, h: 70, isTouching: false },
+  { x: 1100, y: 200, w: 70, h: 70, isTouching: false },
+  { x: 1100, y: 600, w: 70, h: 70, isTouching: false },
 ];
 let synth;
 let soundStarted = false;
@@ -90,14 +90,14 @@ function startSound() {
 function pathTriangle() {
   fill(255, 255, 0, 150);
   noStroke();
-  //left hand
-  rect(500, 200, 70, 70);
-  rect(500, 600, 70, 70);
-
   //right hand
   rect(750, 200, 70, 70);
   rect(750, 600, 70, 70);
-  rect(950, 400, 70, 70);
+  rect(500, 400, 70, 70);
+
+  //left hand
+  rect(1100, 200, 70, 70);
+  rect(1100, 600, 70, 70);
 }
 
 // Log window dimensions
