@@ -178,8 +178,8 @@ function weatherAPI() {
 //artworks
 // flowfield artwork
 const fieldSizeFlowfield = 10;
-const maxColsFlowfield = Math.ceil(innerWidth / fieldSize);
-const maxRowsFlowfield = Math.ceil(innerHeight / fieldSize);
+const maxColsFlowfield = Math.ceil(innerWidth / fieldSizeFlowfield);
+const maxRowsFlowfield = Math.ceil(innerHeight / fieldSizeFlowfield);
 const dividerFlowfield = 4;
 let flowfield;
 let agents = [];
