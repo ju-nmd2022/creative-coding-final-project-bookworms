@@ -52,12 +52,12 @@ function draw() {
   }
   pop();
 
-  // if statement for what kind of artwork gets displayed
- /*  if (points > 20) {
+  // if statement for what kind of artwork gets displayed : changing this to mood when we have created a function deciding mood
+  if(points > 20){
     flowfieldArtwork();
   } else if (points > 20) {
     noise();
-  } */
+  } 
 
   pathTriangle();
 }
@@ -66,7 +66,7 @@ function getHandsData(results) {
   hands = results;
 
   if (hands.length > 0 && !soundStarted) {
-    soundStarted = true; // Set the flag to true to prevent restarting
+    soundStarted = true;
     startSound();
   }
 }
@@ -125,8 +125,10 @@ function checkHover(x, y) {
 }
 
 function randomizeScore() {
-  if (points > 1 && points < 10) {
+  if (points > 1 && points < 15) {
     let randomValue = Math.floor(Math.random());
+  } else if (points > 15 && points < 30){
+    let randomValue = Math.floor(Math.random() * 20 + 10)
   }
 }
 
@@ -175,9 +177,9 @@ function weatherAPI() {
 
 //artworks
 // flowfield artwork
-/* const fieldSizeFlowfield = 10;
-const maxColsFlowfield = Math.ceil(innerWidth / fieldSize); 
-const maxRowsFlowfield = Math.ceil(innerHeight / fieldSize);
+const fieldSizeFlowfield = 10;
+const maxColsFlowfield = Math.ceil(innerWidth / fieldSizeFlowfield);
+const maxRowsFlowfield = Math.ceil(innerHeight / fieldSizeFlowfield);
 const dividerFlowfield = 4;
 let flowfield;
 let agents = [];
@@ -314,4 +316,4 @@ function noise() {
   noLoop();
 }
 
-function pixels() {} */
+function pixels() {} 
