@@ -154,11 +154,12 @@ function pathLine() {
   rect(windowWidth - 500, windowHeight - 200, 50, 50);
 }
 
-//The following 16 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
+//The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
 function weatherAPI() {
   const apiUrl =
     "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
 
+    //GET request
   fetch(apiUrl)
     .then((response) => {
       if (!response.ok) {
@@ -168,6 +169,13 @@ function weatherAPI() {
     })
     .then((data) => {
       console.log(data);
+      //storing in a database
+      const temperature = Math.floor(data.current.temp_c);
+      const wind = Math.floor(data.current.wind_kph);
+      const humidity = data.current.humidity;
+      const latJKPG = Math.floor(data.location.lat);
+      const lonJKPG = Math.floor(data.location.lon);
+      console.log(temperature, wind, humidity, latJKPG, lonJKPG);
     })
     .catch((error) => {
       console.log("Error", error);
@@ -176,10 +184,10 @@ function weatherAPI() {
 
 //artworks
 // flowfield artwork
-const fieldSizeFlowfield = 10;
+const fieldSizeFlowfield = 10; //! Here variable instead of math.random
 const maxColsFlowfield = Math.ceil(innerWidth / fieldSizeFlowfield);
 const maxRowsFlowfield = Math.ceil(innerHeight / fieldSizeFlowfield);
-const dividerFlowfield = 4;
+const dividerFlowfield = 4; //! Here variable instead of math.random
 let flowfield;
 let agents = [];
 
@@ -246,7 +254,7 @@ class Agent {
 
 function generateField() {
   let flowfield = [];
-  noiseSeed(Math.random() * 100);
+  noiseSeed(Math.random() * 100); //! Here variable instead of math.random
   for (let x = 0; x < maxColsFlowfield; x++) {
     flowfield.push([]);
     for (let y = 0; y < maxRowsFlowfield; y++) {
@@ -261,7 +269,7 @@ function generateField() {
 
 function generateAgents() {
   for (let i = 0; i < 500; i++) {
-    let agent = new Agent(
+    let agent = new Agent( //! Here variable instead of math.random
       Math.random() * innerWidth,
       Math.random() * innerHeight,
       2,
@@ -288,8 +296,8 @@ function flowfieldArtwork() {
 }
 
 // noise artwork
-const sizeNoise = 10;
-const dividerNoise = 25;
+const sizeNoise = 10; //! Here variable instead of math.random
+const dividerNoise = 25; //! Here variable instead of math.random
 const numRowsNoise = 60;
 const numColsNoise = 60;
 
