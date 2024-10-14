@@ -326,10 +326,10 @@ function flowfieldArtwork() {
 //* noise artwork
 
 function noiseArtwork() {
-  const sizeNoise = windChill; //! Here variable instead of math.random
-  const dividerNoise = humidity; //! Here variable instead of math.random
-  const numRowsNoise = 60;
-  const numColsNoise = 60;
+  const sizeNoise = windChill; 
+  const dividerNoise = humidity; 
+  const numRowsNoise = latJKPG;
+  const numColsNoise = latJKPG;
   // the following 6 lines of code were
   // Calculate the total width and height of the artwork
   let artworkWidth = numColsNoise * sizeNoise;
@@ -341,11 +341,11 @@ function noiseArtwork() {
 
   console.log(offsetX, offsetY);
 
-  background(255);
+  background(Math.random(50, 255));
   noStroke();
   fill(0);
   colorMode(HSB, 100);
-  noiseSeed(temperature);
+  noiseSeed(temperature * Math.random(4,7));
   for (let y = 0; y < numRowsNoise; y++) {
     for (let x = 0; x < numColsNoise; x++) {
       const c = noise(x / dividerNoise, y / dividerNoise) * 100;
