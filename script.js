@@ -129,27 +129,21 @@ function checkHover(x, y) {
   }
 }
 
-function randomizeScore() { //! result is not working correctly
+function randomizeScore() {
+  //! result is not working correctly
   if (points >= 500 && points < 1000) {
-    result = Math.sqrt(
-      7 / (points * points) +
-        Math.sin(points) * Math.log(points * points * points + 2)
-    );
-    console.log("Result:", result);
+    result =
+      Math.floor(Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)) / 100;
+    console.log("Result 1:", result);
     displayingArt(result);
   } else if (points >= 1000 && points < 2500) {
-    result =
-      Math.acos((Math.exp(points - 1) + 5 * points * points) / Math.PI) +
-      2 / (points * points + 1);
-    console.log("Result:", result);
+    result = Math.floor(Math.abs(Math.sin(points / 100)) + Math.pow(points, 3) / 1000 + 1) / 100;
+    console.log("Result 2:", result);
     displayingArt(result);
   } else if (points >= 2500) {
     result =
-      Math.pow(points, 4) -
-      Math.log(points * points * points + 1) / points +
-      Math.tan(points) -
-      (1 / (points + 1)) * (points * points + 1 / points);
-    console.log("Result:", result);
+    Math.floor(Math.log(points + 1) + 100 / (points + 1)) / 100;
+    console.log("Result 3:", result);
     displayingArt(result);
   }
 }
@@ -157,10 +151,10 @@ function randomizeScore() { //! result is not working correctly
 //TODO: After depending on the amount of points you get from the game --> number is generated --> artwork is chosen (either this or that)
 function displayingArt(result) {
   console.log("display with", result);
-  if (result > 2000) {
+  if (result >= 6000) {
     console.log("flow");
     flowfieldArtwork();
-  } else if (result < 2000) {
+  } else if (result < 6000) {
     console.log("noise");
     noise();
   }
