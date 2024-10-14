@@ -14,6 +14,14 @@ let soundStarted = false;
 let result;
 let timer = 0;
 let stopTime = Math.floor((Math.random() * (60 - 30) + 30) * 100) / 100;
+//API
+let temperature;
+let wind;
+let humidity;
+let latJKPG;
+let lonJKPG;
+let windChill;
+let pressure;
 
 function preload() {
   handpose = ml5.handPose();
@@ -43,26 +51,26 @@ function draw() {
   image(video, 0, 0);
   background(0);
 
-  for (let hand of hands) {
-    let handsMiddle = hand.middle_finger_mcp;
-
-    noStroke();
-    fill(0, 255, 255);
-    ellipse(handsMiddle.x, handsMiddle.y, 30);
-
-    // Check if the hand is hovering over any of the rectangles
-    checkHover(handsMiddle.x, handsMiddle.y);
-  }
-
   //after the time is over the art is drawn
   if (timer < stopTime) {
     timer += deltaTime / 1000;
+
+    for (let hand of hands) {
+      let handsMiddle = hand.middle_finger_mcp;
+
+      noStroke();
+      fill(0, 255, 255);
+      ellipse(handsMiddle.x, handsMiddle.y, 30);
+
+      // Check if the hand is hovering over any of the rectangles
+      checkHover(handsMiddle.x, handsMiddle.y);
+    }
     pathTriangle();
   } else {
     timer = stopTime;
     randomizeScore();
-    console.log("random score!");
   }
+
   pop();
   console.log("timer", timer, "stopTime", stopTime);
 }
@@ -130,25 +138,28 @@ function checkHover(x, y) {
 }
 
 function randomizeScore() {
-  //! result is not working correctly
-  if (points >= 500 && points < 1000) {
+  if (points >= 0 && points < 1000) {
     result =
-      Math.floor(Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)) / 100;
+      Math.floor(
+        Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)
+      ) / 100;
     console.log("Result 1:", result);
     displayingArt(result);
   } else if (points >= 1000 && points < 2500) {
-    result = Math.floor(Math.abs(Math.sin(points / 100)) + Math.pow(points, 3) / 1000 + 1) / 100;
+    result =
+      Math.floor(
+        Math.abs(Math.sin(points / 100)) + Math.pow(points, 3) / 1000 + 1
+      ) / 100;
     console.log("Result 2:", result);
     displayingArt(result);
   } else if (points >= 2500) {
-    result =
-    Math.floor(Math.log(points + 1) + 100 / (points + 1)) / 100;
+    result = Math.floor(Math.log(points + 1) + 100 / (points + 1)) / 100;
     console.log("Result 3:", result);
     displayingArt(result);
   }
 }
 
-//TODO: After depending on the amount of points you get from the game --> number is generated --> artwork is chosen (either this or that)
+//TODO: artwork is chosen  - they dont show up....
 function displayingArt(result) {
   console.log("display with", result);
   if (result >= 6000) {
@@ -156,31 +167,8 @@ function displayingArt(result) {
     flowfieldArtwork();
   } else if (result < 6000) {
     console.log("noise");
-    noise();
+    noiseArtwork();
   }
-}
-
-function pathCircle() {
-  push();
-  fill(255, 255, 0);
-  rect(500, 200, 50, 50);
-  rect(500, windowHeight - 200, 50, 50);
-  pop();
-
-  noFill();
-  stroke(255, 255, 0);
-  strokeWeight(50);
-  ellipse(windowWidth - 800, windowHeight - 500, 750);
-}
-
-function pathLine() {
-  fill(255, 255, 0);
-
-  rect(500, 200, 50, 50);
-  rect(500, windowHeight - 200, 50, 50);
-
-  rect(windowWidth - 500, 200, 50, 50);
-  rect(windowWidth - 500, windowHeight - 200, 50, 50);
 }
 
 //The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
@@ -199,12 +187,23 @@ function weatherAPI() {
     .then((data) => {
       console.log(data);
       //TODO: testing if the variables make it out
-      const temperature = Math.floor(data.current.temp_c);
-      const wind = Math.floor(data.current.wind_kph);
-      const humidity = data.current.humidity;
-      const latJKPG = Math.floor(data.location.lat);
-      const lonJKPG = Math.floor(data.location.lon);
-      console.log(temperature, wind, humidity, latJKPG, lonJKPG);
+      temperature = Math.floor(data.current.temp_c);
+      wind = Math.floor(data.current.wind_kph);
+      humidity = data.current.humidity;
+      latJKPG = Math.floor(data.location.lat);
+      lonJKPG = Math.floor(data.location.lon);
+      windChill = Math.floor(data.current.windchill_c);
+      pressure = data.current.pressure_mb;
+
+      console.log(
+        temperature,
+        wind,
+        humidity,
+        latJKPG,
+        lonJKPG,
+        windChill,
+        pressure
+      );
     })
     .catch((error) => {
       console.log("Error", error);
@@ -212,7 +211,7 @@ function weatherAPI() {
 }
 
 //artworks
-// flowfield artwork
+//* flowfield artwork
 const fieldSizeFlowfield = 10; //! Here variable instead of math.random; 10
 const maxColsFlowfield = Math.ceil(innerWidth / fieldSizeFlowfield);
 const maxRowsFlowfield = Math.ceil(innerHeight / fieldSizeFlowfield);
@@ -324,26 +323,37 @@ function flowfieldArtwork() {
   }
 }
 
-// noise artwork
-const sizeNoise = 10; //! Here variable instead of math.random
-const dividerNoise = 25; //! Here variable instead of math.random
-const numRowsNoise = 60;
-const numColsNoise = 60;
+//* noise artwork
 
-function noise() {
+function noiseArtwork() {
+  const sizeNoise = windChill; //! Here variable instead of math.random
+  const dividerNoise = humidity; //! Here variable instead of math.random
+  const numRowsNoise = 60;
+  const numColsNoise = 60;
+  // the following 6 lines of code were
+  // Calculate the total width and height of the artwork
+  let artworkWidth = numColsNoise * sizeNoise;
+  let artworkHeight = numRowsNoise * sizeNoise;
+
+  // Calculate offsets to center the artwork
+  let offsetX = (windowWidth - artworkWidth) / 2;
+  let offsetY = (windowHeight - artworkHeight) / 2;
+
+  console.log(offsetX, offsetY);
+
   background(255);
   noStroke();
   fill(0);
   colorMode(HSB, 100);
-
+  noiseSeed(temperature);
   for (let y = 0; y < numRowsNoise; y++) {
     for (let x = 0; x < numColsNoise; x++) {
       const c = noise(x / dividerNoise, y / dividerNoise) * 100;
       const value = noise(x / dividerNoise, y / dividerNoise) * sizeNoise;
       fill(c, 100, 80);
       ellipse(
-        sizeNoise / 2 + x * sizeNoise,
-        sizeNoise / 2 + y * sizeNoise,
+        offsetX + sizeNoise / 2 + x * sizeNoise,
+        offsetY + sizeNoise / 2 + y * sizeNoise,
         value
       );
     }
@@ -351,5 +361,3 @@ function noise() {
 
   noLoop();
 }
-
-function pixels() {}
