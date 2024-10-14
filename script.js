@@ -11,6 +11,9 @@ let rects = [
 ];
 let synth;
 let soundStarted = false;
+let result;
+let timer = 0;
+let stopTime = Math.floor((Math.random() * (60 - 30) + 30) * 100) / 100;
 
 function preload() {
   handpose = ml5.handPose();
@@ -50,15 +53,18 @@ function draw() {
     // Check if the hand is hovering over any of the rectangles
     checkHover(handsMiddle.x, handsMiddle.y);
   }
-  pathTriangle();
-  pop();
 
-  // if statement for what kind of artwork gets displayed : changing this to mood when we have created a function deciding mood
-  if (points > 20) {
-    flowfieldArtwork();
-  } else if (points > 20) {
-    noise();
+  //after the time is over the art is drawn
+  if (timer < stopTime) {
+    timer += deltaTime / 1000;
+    pathTriangle();
+  } else {
+    timer = stopTime;
+    randomizeScore();
+    console.log("random score!");
   }
+  pop();
+  console.log("timer", timer, "stopTime", stopTime);
 }
 
 function getHandsData(results) {
@@ -123,11 +129,40 @@ function checkHover(x, y) {
   }
 }
 
-function randomizeScore() {
-  if (points > 1 && points < 15) {
-    let randomValue = Math.floor(Math.random());
-  } else if (points > 15 && points < 30) {
-    let randomValue = Math.floor(Math.random() * 20 + 10);
+function randomizeScore() { //! result is not working correctly
+  if (points >= 500 && points < 1000) {
+    result = Math.sqrt(
+      7 / (points * points) +
+        Math.sin(points) * Math.log(points * points * points + 2)
+    );
+    console.log("Result:", result);
+    displayingArt(result);
+  } else if (points >= 1000 && points < 2500) {
+    result =
+      Math.acos((Math.exp(points - 1) + 5 * points * points) / Math.PI) +
+      2 / (points * points + 1);
+    console.log("Result:", result);
+    displayingArt(result);
+  } else if (points >= 2500) {
+    result =
+      Math.pow(points, 4) -
+      Math.log(points * points * points + 1) / points +
+      Math.tan(points) -
+      (1 / (points + 1)) * (points * points + 1 / points);
+    console.log("Result:", result);
+    displayingArt(result);
+  }
+}
+
+//TODO: After depending on the amount of points you get from the game --> number is generated --> artwork is chosen (either this or that)
+function displayingArt(result) {
+  console.log("display with", result);
+  if (result > 2000) {
+    console.log("flow");
+    flowfieldArtwork();
+  } else if (result < 2000) {
+    console.log("noise");
+    noise();
   }
 }
 
@@ -159,7 +194,7 @@ function weatherAPI() {
   const apiUrl =
     "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
 
-    //GET request
+  //GET request
   fetch(apiUrl)
     .then((response) => {
       if (!response.ok) {
@@ -169,7 +204,7 @@ function weatherAPI() {
     })
     .then((data) => {
       console.log(data);
-      //storing in a database
+      //TODO: testing if the variables make it out
       const temperature = Math.floor(data.current.temp_c);
       const wind = Math.floor(data.current.wind_kph);
       const humidity = data.current.humidity;
@@ -184,7 +219,7 @@ function weatherAPI() {
 
 //artworks
 // flowfield artwork
-const fieldSizeFlowfield = 10; //! Here variable instead of math.random
+const fieldSizeFlowfield = 10; //! Here variable instead of math.random; 10
 const maxColsFlowfield = Math.ceil(innerWidth / fieldSizeFlowfield);
 const maxRowsFlowfield = Math.ceil(innerHeight / fieldSizeFlowfield);
 const dividerFlowfield = 4; //! Here variable instead of math.random
