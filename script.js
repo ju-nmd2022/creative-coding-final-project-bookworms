@@ -169,6 +169,8 @@ function displayingArt(result) {
     result > 7000
   ) {
     console.log("flow");
+
+    //background(localTime / pressure, cloud * temperature, heatIndex * wind, 20);
     flowfieldArtwork();
   } else {
     console.log("noise");
@@ -272,8 +274,7 @@ class Agent {
 
   draw() {
     push();
-    //background(0);
-    stroke(255, 255, 255, humidity + 40);
+    stroke(wind * 15, heatIndex * 2, temperature, humidity + 70);
     strokeWeight(heatIndex);
     line(
       this.lastPosition.x,
@@ -291,7 +292,7 @@ function generateField() {
   for (let x = 0; x < maxColsFlowfield; x++) {
     flowfield.push([]);
     for (let y = 0; y < maxRowsFlowfield; y++) {
-      const dividerFlowfield = pressure/10;
+      const dividerFlowfield = pressure / 10;
       const value =
         noise(x / dividerFlowfield, y / dividerFlowfield) * Math.PI * 2;
       flowfield[x].push(p5.Vector.fromAngle(value));
