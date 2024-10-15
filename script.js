@@ -37,11 +37,8 @@ function setup() {
 
   weatherAPI();
 
-  if (points > 20) {
-    background(255, 255, 255);
-    field = generateField();
-    generateAgents();
-  }
+  field = generateField();
+  generateAgents();
 }
 
 function draw() {
@@ -159,7 +156,6 @@ function randomizeScore() {
   }
 }
 
-//TODO: artwork is chosen  - they dont show up....
 function displayingArt(result) {
   console.log("display with", result);
   if (result >= 6000) {
@@ -186,7 +182,6 @@ function weatherAPI() {
     })
     .then((data) => {
       console.log(data);
-      //TODO: testing if the variables make it out
       temperature = Math.floor(data.current.temp_c);
       wind = Math.floor(data.current.wind_kph);
       humidity = data.current.humidity;
@@ -268,7 +263,7 @@ class Agent {
 
   draw() {
     push();
-    stroke(0, 0, 0, 40);
+    stroke(255, 0, 0, 50);
     strokeWeight(1.5);
     line(
       this.lastPosition.x,
@@ -281,7 +276,7 @@ class Agent {
 }
 
 function generateField() {
-  let flowfield = [];
+  flowfield = [];
   noiseSeed(Math.random() * 100); //! Here variable instead of math.random
   for (let x = 0; x < maxColsFlowfield; x++) {
     flowfield.push([]);
@@ -293,6 +288,7 @@ function generateField() {
   }
 
   return flowfield;
+  
 }
 
 function generateAgents() {
@@ -312,10 +308,13 @@ function flowfieldArtwork() {
     const x = Math.floor(agent.position.x / fieldSizeFlowfield);
     const y = Math.floor(agent.position.y / fieldSizeFlowfield);
 
-    if (x >= 0 && x < maxColsFlowfield && y >= 0 && y < maxRowsFlowfield) {
+    /* if (x >= 0 && x < maxColsFlowfield && y >= 0 && y < maxRowsFlowfield) {
       const desiredDirection = flowfield[x][y];
       agent.follow(desiredDirection);
-    }
+    } */
+
+    const desiredDirection = flowfield[x][y];
+    agent.follow(desiredDirection);
 
     agent.update();
     agent.checkBorders();
@@ -326,11 +325,11 @@ function flowfieldArtwork() {
 //* noise artwork
 
 function noiseArtwork() {
-  const sizeNoise = windChill; 
-  const dividerNoise = humidity; 
+  const sizeNoise = windChill;
+  const dividerNoise = humidity;
   const numRowsNoise = latJKPG;
   const numColsNoise = latJKPG;
-  // the following 6 lines of code were
+  // the following 6 lines of code were coded with the help with ChatGPT
   // Calculate the total width and height of the artwork
   let artworkWidth = numColsNoise * sizeNoise;
   let artworkHeight = numRowsNoise * sizeNoise;
@@ -339,13 +338,11 @@ function noiseArtwork() {
   let offsetX = (windowWidth - artworkWidth) / 2;
   let offsetY = (windowHeight - artworkHeight) / 2;
 
-  console.log(offsetX, offsetY);
-
   background(Math.random(50, 255));
   noStroke();
   fill(0);
   colorMode(HSB, 100);
-  noiseSeed(temperature * Math.random(4,7));
+  noiseSeed(temperature * Math.random(4, 7));
   for (let y = 0; y < numRowsNoise; y++) {
     for (let x = 0; x < numColsNoise; x++) {
       const c = noise(x / dividerNoise, y / dividerNoise) * 100;
