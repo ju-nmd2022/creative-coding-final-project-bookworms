@@ -272,8 +272,8 @@ class Agent {
 
   draw() {
     push();
-    background(255);
-    stroke(255, 0, 0, windChill * 2);
+    //background(0);
+    stroke(255, 255, 255, humidity + 40);
     strokeWeight(heatIndex);
     line(
       this.lastPosition.x,
@@ -331,7 +331,7 @@ function flowfieldArtwork() {
 //* noise artwork
 
 function noiseArtwork() {
-  const sizeNoise = (windChill * wind) / 2;
+  const sizeNoise = windChill * wind;
   const dividerNoise = humidity;
   const numRowsNoise = cloud;
   const numColsNoise = cloud;
