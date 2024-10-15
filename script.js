@@ -142,18 +142,18 @@ function randomizeScore() {
       Math.floor(
         Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)
       ) / 100;
-    console.log("Result 1:", result);
+
     displayingArt(result);
   } else if (points >= 1000 && points < 2500) {
     result =
       Math.floor(
         Math.abs(Math.sin(points / 100)) + Math.pow(points, 3) / 1000 + 1
       ) / 100;
-    console.log("Result 2:", result);
+
     displayingArt(result);
   } else if (points >= 2500) {
     result = Math.floor(Math.log(points + 1) + 100 / (points + 1)) / 100;
-    console.log("Result 3:", result);
+
     displayingArt(result);
   }
 }
@@ -169,7 +169,6 @@ function displayingArt(result) {
     result > 7000
   ) {
     console.log("flow");
-
     //background(localTime / pressure, cloud * temperature, heatIndex * wind, 20);
     flowfieldArtwork();
   } else {
@@ -354,9 +353,9 @@ function noiseArtwork() {
 
   for (let y = 0; y < numRowsNoise; y++) {
     for (let x = 0; x < numColsNoise; x++) {
-      const c = noise(x / dividerNoise, y / dividerNoise) * 100;
+      const c = noise(x / dividerNoise, y / dividerNoise) * humidity;
       const value = noise(x / dividerNoise, y / dividerNoise) * sizeNoise;
-      fill(c, 100, 80);
+      fill(c, wind * 15, heatIndex * 15);
       ellipse(
         offsetX + sizeNoise / 2 + x * sizeNoise,
         offsetY + sizeNoise / 2 + y * sizeNoise,
