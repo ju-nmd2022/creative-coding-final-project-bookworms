@@ -68,6 +68,14 @@ function draw() {
     timer = stopTime;
     randomizeScore();
   }
+  if (hands.length > 0 && !soundStarted) {
+    soundStarted = true;
+    startSound();
+  }
+
+  if (soundStarted && timer >= stopTime) {
+    Tone.Transport.stop();
+  }
 
   pop();
   console.log("timer", timer, "stopTime", stopTime);
@@ -75,11 +83,6 @@ function draw() {
 
 function getHandsData(results) {
   hands = results;
-
-  if (hands.length > 0 && !soundStarted) {
-    soundStarted = true;
-    startSound();
-  }
 }
 
 function startSound() {
@@ -113,12 +116,12 @@ function pathTriangle() {
 }
 
 // Log window dimensions
-console.log("Window dimensions:", window.innerWidth, window.innerHeight);
+/* console.log("Window dimensions:", window.innerWidth, window.innerHeight); */
 
 // Log the rectangle positions and sizes
-rects.forEach((rect, index) => {
+/* rects.forEach((rect, index) => {
   console.log(`Rectangle ${index + 1}:`, rect);
-});
+}); */
 
 function checkHover(x, y) {
   for (let rect of rects) {
@@ -159,12 +162,19 @@ function randomizeScore() {
 
 function displayingArt(result) {
   console.log("display with", result);
-  if (result >= 6000) {
+  if (
+    result >= 200 ||
+    600 < result < 1000 ||
+    2000 < result < 2500 ||
+    3000 < result < 4700 ||
+    5500 < result < 600 ||
+    result > 7000
+  ) {
     console.log("flow");
-    flowfieldArtwork();
-  } else if (result < 6000) {
-    console.log("noise");
     noiseArtwork();
+  } else {
+    console.log("noise");
+    flowfieldArtwork();
   }
 }
 
@@ -266,8 +276,9 @@ class Agent {
 
   draw() {
     push();
-    stroke(255, 0, 0, (windChill * points) / 100);
-    strokeWeight(humidity);
+    background(Math.random(100, 255));
+    stroke(255, 0, 0, windChill);
+    strokeWeight(heatIndex);
     line(
       this.lastPosition.x,
       this.lastPosition.y,
@@ -295,10 +306,10 @@ function generateField() {
 
 function generateAgents() {
   for (let i = 0; i < 500; i++) {
-    let agent = new Agent( //! Here variable instead of math.random
+    let agent = new Agent(
       Math.random() * innerWidth,
       Math.random() * innerHeight,
-      heatIndex,
+      humidity,
       0.3
     );
     agents.push(agent);
@@ -314,6 +325,9 @@ function flowfieldArtwork() {
       const desiredDirection = flowfield[x][y];
       agent.follow(desiredDirection);
     }
+
+    /* const desiredDirection = flowfield[x][y];
+    agent.follow(desiredDirection); */
 
     agent.update();
     agent.checkBorders();
@@ -356,5 +370,5 @@ function noiseArtwork() {
     }
   }
 
-  noLoop();
+  //noLoop();
 }
