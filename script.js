@@ -18,10 +18,11 @@ let stopTime = Math.floor((Math.random() * (60 - 30) + 30) * 100) / 100;
 let temperature;
 let wind;
 let humidity;
-let latJKPG;
-let lonJKPG;
 let windChill;
 let pressure;
+let cloud;
+let heatIndex;
+let localTime;
 
 function preload() {
   handpose = ml5.handPose();
@@ -185,19 +186,21 @@ function weatherAPI() {
       temperature = Math.floor(data.current.temp_c);
       wind = Math.floor(data.current.wind_kph);
       humidity = data.current.humidity;
-      latJKPG = Math.floor(data.location.lat);
-      lonJKPG = Math.floor(data.location.lon);
       windChill = Math.floor(data.current.windchill_c);
       pressure = data.current.pressure_mb;
+      cloud = data.current.cloud;
+      heatIndex = Math.floor(data.current.heatindex_c);
+      localTime = data.location.localtime_epoch;
 
       console.log(
         temperature,
         wind,
         humidity,
-        latJKPG,
-        lonJKPG,
         windChill,
-        pressure
+        pressure,
+        cloud,
+        heatIndex,
+        localTime
       );
     })
     .catch((error) => {
@@ -207,10 +210,10 @@ function weatherAPI() {
 
 //artworks
 //* flowfield artwork
-const fieldSizeFlowfield = 10; //! Here variable instead of math.random; 10
+const fieldSizeFlowfield = temperature + heatIndex;
 const maxColsFlowfield = Math.ceil(innerWidth / fieldSizeFlowfield);
 const maxRowsFlowfield = Math.ceil(innerHeight / fieldSizeFlowfield);
-const dividerFlowfield = 4; //! Here variable instead of math.random
+const dividerFlowfield = pressure;
 let flowfield;
 let agents = [];
 
@@ -263,8 +266,8 @@ class Agent {
 
   draw() {
     push();
-    stroke(255, 0, 0, 50);
-    strokeWeight(1.5);
+    stroke(255, 0, 0, (windChill * points) / 100);
+    strokeWeight(humidity);
     line(
       this.lastPosition.x,
       this.lastPosition.y,
@@ -277,7 +280,7 @@ class Agent {
 
 function generateField() {
   flowfield = [];
-  noiseSeed(Math.random() * 100); //! Here variable instead of math.random
+  noiseSeed(points);
   for (let x = 0; x < maxColsFlowfield; x++) {
     flowfield.push([]);
     for (let y = 0; y < maxRowsFlowfield; y++) {
@@ -288,7 +291,6 @@ function generateField() {
   }
 
   return flowfield;
-  
 }
 
 function generateAgents() {
@@ -296,7 +298,7 @@ function generateAgents() {
     let agent = new Agent( //! Here variable instead of math.random
       Math.random() * innerWidth,
       Math.random() * innerHeight,
-      2,
+      heatIndex,
       0.3
     );
     agents.push(agent);
@@ -308,13 +310,10 @@ function flowfieldArtwork() {
     const x = Math.floor(agent.position.x / fieldSizeFlowfield);
     const y = Math.floor(agent.position.y / fieldSizeFlowfield);
 
-    /* if (x >= 0 && x < maxColsFlowfield && y >= 0 && y < maxRowsFlowfield) {
+    if (x >= 0 && x < maxColsFlowfield && y >= 0 && y < maxRowsFlowfield) {
       const desiredDirection = flowfield[x][y];
       agent.follow(desiredDirection);
-    } */
-
-    const desiredDirection = flowfield[x][y];
-    agent.follow(desiredDirection);
+    }
 
     agent.update();
     agent.checkBorders();
@@ -325,10 +324,10 @@ function flowfieldArtwork() {
 //* noise artwork
 
 function noiseArtwork() {
-  const sizeNoise = windChill;
+  const sizeNoise = (windChill * wind) / 2;
   const dividerNoise = humidity;
-  const numRowsNoise = latJKPG;
-  const numColsNoise = latJKPG;
+  const numRowsNoise = cloud;
+  const numColsNoise = cloud;
   // the following 6 lines of code were coded with the help with ChatGPT
   // Calculate the total width and height of the artwork
   let artworkWidth = numColsNoise * sizeNoise;
@@ -342,7 +341,8 @@ function noiseArtwork() {
   noStroke();
   fill(0);
   colorMode(HSB, 100);
-  noiseSeed(temperature * Math.random(4, 7));
+  noiseSeed(points);
+
   for (let y = 0; y < numRowsNoise; y++) {
     for (let x = 0; x < numColsNoise; x++) {
       const c = noise(x / dividerNoise, y / dividerNoise) * 100;
