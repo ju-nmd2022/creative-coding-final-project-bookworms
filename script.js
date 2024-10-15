@@ -49,7 +49,6 @@ function draw() {
   image(video, 0, 0);
   background(0);
 
-  //after the time is over the art is drawn
   if (timer < stopTime) {
     timer += deltaTime / 1000;
 
@@ -60,7 +59,6 @@ function draw() {
       fill(0, 255, 255);
       ellipse(handsMiddle.x, handsMiddle.y, 30);
 
-      // Check if the hand is hovering over any of the rectangles
       checkHover(handsMiddle.x, handsMiddle.y);
     }
     pathTriangle();
@@ -86,7 +84,6 @@ function getHandsData(results) {
 }
 
 function startSound() {
-  // the beat to follow
   Tone.start()
     .then(() => {
       synth = new Tone.PolySynth().toDestination();
@@ -183,7 +180,6 @@ function weatherAPI() {
   const apiUrl =
     "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
 
-  //GET request
   fetch(apiUrl)
     .then((response) => {
       if (!response.ok) {
@@ -218,8 +214,9 @@ function weatherAPI() {
     });
 }
 
-//artworks
+
 //* flowfield artwork
+
 const fieldSizeFlowfield = temperature + heatIndex;
 const maxColsFlowfield = Math.ceil(innerWidth / fieldSizeFlowfield);
 const maxRowsFlowfield = Math.ceil(innerHeight / fieldSizeFlowfield);
