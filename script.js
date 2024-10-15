@@ -160,18 +160,18 @@ function randomizeScore() {
 function displayingArt(result) {
   console.log("display with", result);
   if (
-    result >= 200 ||
-    600 < result < 1000 ||
-    2000 < result < 2500 ||
-    3000 < result < 4700 ||
-    5500 < result < 600 ||
+    result <= 200 ||
+    (result > 600 && result < 1000) ||
+    (result > 2000 && result < 2500) ||
+    (result > 3000 && result < 4700) ||
+    (result > 5500 && result < 6000) ||
     result > 7000
   ) {
     console.log("flow");
-    noiseArtwork();
+    flowfieldArtwork();
   } else {
     console.log("noise");
-    flowfieldArtwork();
+    noiseArtwork();
   }
 }
 
@@ -213,7 +213,6 @@ function weatherAPI() {
       console.log("Error", error);
     });
 }
-
 
 //* flowfield artwork
 
@@ -273,8 +272,8 @@ class Agent {
 
   draw() {
     push();
-    background(Math.random(100, 255));
-    stroke(255, 0, 0, windChill);
+    background(255);
+    stroke(255, 0, 0, windChill * 2);
     strokeWeight(heatIndex);
     line(
       this.lastPosition.x,
@@ -306,7 +305,7 @@ function generateAgents() {
     let agent = new Agent(
       Math.random() * innerWidth,
       Math.random() * innerHeight,
-      humidity,
+      2,
       0.3
     );
     agents.push(agent);
@@ -323,9 +322,6 @@ function flowfieldArtwork() {
       agent.follow(desiredDirection);
     }
 
-    /* const desiredDirection = flowfield[x][y];
-    agent.follow(desiredDirection); */
-
     agent.update();
     agent.checkBorders();
     agent.draw();
@@ -340,11 +336,11 @@ function noiseArtwork() {
   const numRowsNoise = cloud;
   const numColsNoise = cloud;
   // the following 6 lines of code were coded with the help with ChatGPT
-  // Calculate the total width and height of the artwork
+  // total width and height of the artwork
   let artworkWidth = numColsNoise * sizeNoise;
   let artworkHeight = numRowsNoise * sizeNoise;
 
-  // Calculate offsets to center the artwork
+  // offsets to center the artwork
   let offsetX = (windowWidth - artworkWidth) / 2;
   let offsetY = (windowHeight - artworkHeight) / 2;
 
@@ -367,5 +363,5 @@ function noiseArtwork() {
     }
   }
 
-  //noLoop();
+  noLoop();
 }
