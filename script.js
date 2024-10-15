@@ -13,7 +13,7 @@ let synth;
 let soundStarted = false;
 let result;
 let timer = 0;
-let stopTime = Math.floor((Math.random() * (60 - 30) + 30) * 100) / 100;
+let stopTime = Math.floor((Math.random() * (40 - 20) + 20) * 100) / 100;
 //API
 let temperature;
 let wind;
@@ -26,6 +26,7 @@ let localTime;
 
 function preload() {
   handpose = ml5.handPose();
+  weatherAPI();
 }
 
 function setup() {
@@ -36,7 +37,7 @@ function setup() {
 
   handpose.detectStart(video, getHandsData);
 
-  weatherAPI();
+  // weatherAPI();
 
   field = generateField();
   generateAgents();
@@ -216,10 +217,9 @@ function weatherAPI() {
 
 //* flowfield artwork
 
-const fieldSizeFlowfield = temperature + heatIndex;
+const fieldSizeFlowfield = 10;
 const maxColsFlowfield = Math.ceil(innerWidth / fieldSizeFlowfield);
 const maxRowsFlowfield = Math.ceil(innerHeight / fieldSizeFlowfield);
-const dividerFlowfield = pressure;
 let flowfield;
 let agents = [];
 
@@ -291,6 +291,7 @@ function generateField() {
   for (let x = 0; x < maxColsFlowfield; x++) {
     flowfield.push([]);
     for (let y = 0; y < maxRowsFlowfield; y++) {
+      const dividerFlowfield = pressure/10;
       const value =
         noise(x / dividerFlowfield, y / dividerFlowfield) * Math.PI * 2;
       flowfield[x].push(p5.Vector.fromAngle(value));
@@ -333,8 +334,8 @@ function flowfieldArtwork() {
 function noiseArtwork() {
   const sizeNoise = windChill * wind;
   const dividerNoise = humidity;
-  const numRowsNoise = cloud;
-  const numColsNoise = cloud;
+  const numRowsNoise = cloud * random(10, 20);
+  const numColsNoise = cloud * random(10, 20);
   // the following 6 lines of code were coded with the help with ChatGPT
   // total width and height of the artwork
   let artworkWidth = numColsNoise * sizeNoise;
