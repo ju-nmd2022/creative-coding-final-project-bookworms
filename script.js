@@ -28,9 +28,7 @@ let localTime;
 
 function preload() {
   handpose = ml5.handPose();
-
   weatherAPI();
-
   img = loadImage("Pilar.png");
 }
 
@@ -41,8 +39,6 @@ function setup() {
   video.hide();
 
   handpose.detectStart(video, getHandsData);
-
-  // weatherAPI();
 
   field = generateField();
   generateAgents();
@@ -57,7 +53,6 @@ function draw() {
 
   if (timer < stopTime) {
     timer += deltaTime / 1000;
-
     image(img, 50, 50);
 
     for (let hand of hands) {
@@ -122,21 +117,12 @@ function pathTriangle() {
   rect(1100, 500, 70, 70);
 }
 
-// Log window dimensions
-/* console.log("Window dimensions:", window.innerWidth, window.innerHeight); */
-
-// Log the rectangle positions and sizes
-/* rects.forEach((rect, index) => {
-  console.log(`Rectangle ${index + 1}:`, rect);
-}); */
-
 function checkHover(x, y) {
   for (let rect of rects) {
     let touchingRect = x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
 
     if (touchingRect && !rect.isTouching) {
       points += 1;
-      console.log("points", points);
       rect.isTouching = true;
     } else if (!touchingRect && rect.isTouching) {
       rect.isTouching = false;
@@ -147,21 +133,17 @@ function checkHover(x, y) {
 function randomizeScore() {
   if (points >= 0 && points < 1000) {
     result = Math.floor(Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)) / 100;
-
     displayingArt(result);
   } else if (points >= 1000 && points < 2500) {
     result = Math.floor(Math.abs(Math.sin(points / 100)) + Math.pow(points, 3) / 1000 + 1) / 100;
-
     displayingArt(result);
   } else if (points >= 2500) {
     result = Math.floor(Math.log(points + 1) + 100 / (points + 1)) / 100;
-
     displayingArt(result);
   }
 }
 
 function displayingArt(result) {
-  console.log("display with", result);
   if (
     result <= 200 ||
     (result > 600 && result < 1000) ||
@@ -170,18 +152,14 @@ function displayingArt(result) {
     (result > 5500 && result < 6000) ||
     result > 7000
   ) {
-    console.log("flow");
-    //background(localTime / pressure, cloud * temperature, heatIndex * wind, 20);
     flowfieldArtwork();
   } else {
-    console.log("noise");
     noiseArtwork();
   }
 }
 
 //The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
 function weatherAPI() {
-
   let apiUrl = "https://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
 
   fetch(apiUrl)
@@ -201,8 +179,6 @@ function weatherAPI() {
       cloud = data.current.cloud;
       heatIndex = Math.floor(data.current.heatindex_c);
       localTime = data.location.localtime_epoch;
-
-      console.log(temperature, wind, humidity, windChill, pressure, cloud, heatIndex, localTime);
     })
     .catch(error => {
       console.log("Error", error);
@@ -266,8 +242,8 @@ class Agent {
 
   draw() {
     push();
-    stroke(wind * 15, heatIndex * 2, temperature, humidity + 70);
-    strokeWeight(heatIndex);
+    stroke(wind * 9, heatIndex * 2, temperature, humidity + 70);
+    strokeWeight(points / 150);
     line(this.lastPosition.x, this.lastPosition.y, this.position.x, this.position.y);
     pop();
   }
@@ -284,7 +260,6 @@ function generateField() {
       flowfield[x].push(p5.Vector.fromAngle(value));
     }
   }
-
   return flowfield;
 }
 
@@ -319,11 +294,9 @@ function noiseArtwork() {
   const numRowsNoise = cloud * random(10, 20);
   const numColsNoise = cloud * random(10, 20);
   // the following 6 lines of code were coded with the help with ChatGPT
-  // total width and height of the artwork
   let artworkWidth = numColsNoise * sizeNoise;
   let artworkHeight = numRowsNoise * sizeNoise;
 
-  // offsets to center the artwork
   let offsetX = (windowWidth - artworkWidth) / 2;
   let offsetY = (windowHeight - artworkHeight) / 2;
 
