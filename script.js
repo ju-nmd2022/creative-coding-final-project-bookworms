@@ -81,7 +81,6 @@ function draw() {
   }
 
   pop();
-  console.log("timer", timer, "stopTime", stopTime);
 }
 
 function getHandsData(results) {
