@@ -16,6 +16,7 @@ let timer = 0;
 let stopTime = Math.floor((Math.random() * (40 - 20) + 20) * 100) / 100;
 //API
 let apiUrl;
+let city;
 let temperature;
 let wind;
 let humidity;
@@ -27,7 +28,10 @@ let localTime;
 
 function preload() {
   handpose = ml5.handPose();
-  weatherAPI();
+
+  city = Math.floor(Math.random(1, 3));
+
+  weatherAPI(city);
 
   img = loadImage("/Pilar.png");
 }
@@ -178,14 +182,14 @@ function displayingArt(result) {
 }
 
 //The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
-function weatherAPI(points) {
-  if (points >= 0 && points < 750) {
+function weatherAPI(city) {
+  if (city === 1) {
     apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
     console.log("Jönköping");
-  } else if (points >= 750 && points < 2225) {
+  } else if (city === 2) {
     apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=New Dehli&aqi=no";
     console.log("New Dehli");
-  } else if (points >= 2225) {
+  } else if (city === 3) {
     apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Aasiaat&aqi=no";
     console.log("Aasiaat");
   }
