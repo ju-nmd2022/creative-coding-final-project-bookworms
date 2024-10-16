@@ -111,14 +111,14 @@ function pathTriangle() {
   fill(255, 0, 0, 150);
   noStroke();
   //right hand
-  rect(750, 200, 70, 70);
-  rect(750, 600, 70, 70);
-  rect(500, 400, 70, 70);
+  rect(750, 100, 70, 70);
+  rect(750, 500, 70, 70);
+  rect(500, 300, 70, 70);
 
   fill(0, 0, 255, 150);
   //left hand
-  rect(1100, 200, 70, 70);
-  rect(1100, 600, 70, 70);
+  rect(1100, 100, 70, 70);
+  rect(1100, 500, 70, 70);
 }
 
 // Log window dimensions
