@@ -31,7 +31,7 @@ function preload() {
 
   weatherAPI();
 
-  img = loadImage("/Pilar.png");
+  img = loadImage("Pilar.png");
 }
 
 function setup() {
