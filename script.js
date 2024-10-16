@@ -244,7 +244,7 @@ class Agent {
   draw() {
     push();
     stroke(wind * 9, heatIndex * 2, temperature, humidity + 70);
-    strokeWeight(points / 150);
+    strokeWeight(heatIndex);
     line(this.lastPosition.x, this.lastPosition.y, this.position.x, this.position.y);
     pop();
   }
