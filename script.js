@@ -163,7 +163,7 @@ function displayingArt(result) {
 
 //The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
 function weatherAPI() {
-  let apiUrl = "https://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
+  let apiUrl = "https://api.weatherapi.com/v1/current.json?key=7b05ca88869f4278895121153241610&q=Jönköping&aqi=no";
 
   fetch(apiUrl)
     .then(response => {
