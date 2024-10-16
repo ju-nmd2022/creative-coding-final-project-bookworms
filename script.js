@@ -3,11 +3,11 @@ let video;
 let hands = [];
 let points = 0;
 let rects = [
-  { x: 750, y: 200, w: 70, h: 70, isTouching: false },
-  { x: 750, y: 600, w: 70, h: 70, isTouching: false },
-  { x: 500, y: 400, w: 70, h: 70, isTouching: false },
-  { x: 1100, y: 200, w: 70, h: 70, isTouching: false },
-  { x: 1100, y: 600, w: 70, h: 70, isTouching: false }
+  { x: 750, y: 100, w: 70, h: 70, isTouching: false },
+  { x: 750, y: 500, w: 70, h: 70, isTouching: false },
+  { x: 500, y: 300, w: 70, h: 70, isTouching: false },
+  { x: 1100, y: 100, w: 70, h: 70, isTouching: false },
+  { x: 1100, y: 500, w: 70, h: 70, isTouching: false }
 ];
 let synth;
 let soundStarted = false;
@@ -57,7 +57,7 @@ function draw() {
   if (timer < stopTime) {
     timer += deltaTime / 1000;
 
-    image(img, 10, 10);
+    image(img, 50, 50);
 
     for (let hand of hands) {
       let handsMiddle = hand.middle_finger_mcp;
