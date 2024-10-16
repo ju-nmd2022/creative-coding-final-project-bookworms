@@ -51,6 +51,7 @@ function draw() {
   image(video, 0, 0);
   background(0);
 
+  //The following lines about the timer were done with the help of ChatGPT
   if (timer < stopTime) {
     timer += deltaTime / 1000;
     image(img, 50, 50);
@@ -88,6 +89,7 @@ function getHandsData(results) {
 }
 
 function startSound() {
+  //The following 10 lines of code were done with the help of ChatGPT
   Tone.start()
     .then(() => {
       synth = new Tone.PolySynth().toDestination();
@@ -119,6 +121,7 @@ function pathTriangle() {
 
 function checkHover(x, y) {
   for (let rect of rects) {
+    //The following 6 lines of code are done with the help of ChatGPT
     let touchingRect = x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
 
     if (touchingRect && !rect.isTouching) {
@@ -131,6 +134,7 @@ function checkHover(x, y) {
 }
 
 function randomizeScore() {
+  //The following math equasions were done with the help of ChatGPT
   if (points >= 0 && points < 1000) {
     result = Math.floor(Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)) / 100;
     displayingArt(result);
@@ -184,8 +188,6 @@ function weatherAPI() {
       console.log("Error", error);
     });
 }
-
-//* flowfield artwork
 
 const fieldSizeFlowfield = 10;
 const maxColsFlowfield = Math.ceil(innerWidth / fieldSizeFlowfield);
@@ -286,14 +288,12 @@ function flowfieldArtwork() {
   }
 }
 
-//* noise artwork
-
 function noiseArtwork() {
   const sizeNoise = windChill * wind;
   const dividerNoise = humidity;
   const numRowsNoise = cloud * random(10, 20);
   const numColsNoise = cloud * random(10, 20);
-  // the following 6 lines of code were coded with the help with ChatGPT
+  // the following 5 lines of code were coded with the help with ChatGPT
   let artworkWidth = numColsNoise * sizeNoise;
   let artworkHeight = numRowsNoise * sizeNoise;
 
