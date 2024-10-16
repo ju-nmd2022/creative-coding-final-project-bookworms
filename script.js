@@ -15,6 +15,7 @@ let result;
 let timer = 0;
 let stopTime = Math.floor((Math.random() * (40 - 20) + 20) * 100) / 100;
 //API
+let apiUrl;
 let temperature;
 let wind;
 let humidity;
@@ -177,8 +178,15 @@ function displayingArt(result) {
 }
 
 //The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
-function weatherAPI() {
-  const apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
+function weatherAPI(points) {
+ if (points <= 750) {
+  apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
+ } else if (points > 750 && points < 2225) {
+  apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=New Dehli&aqi=no";
+ } else {
+  apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Aasiaat&aqi=no";
+ }
+
 
   fetch(apiUrl)
     .then(response => {
