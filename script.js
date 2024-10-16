@@ -14,6 +14,7 @@ let soundStarted = false;
 let result;
 let timer = 0;
 let stopTime = Math.floor((Math.random() * (40 - 20) + 20) * 100) / 100;
+let img;
 //API
 let city;
 let temperature;
@@ -179,7 +180,7 @@ function displayingArt(result) {
 }
 
 //The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
-function weatherAPI(city) {
+function weatherAPI() {
 
   let apiUrl = "https://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
 
