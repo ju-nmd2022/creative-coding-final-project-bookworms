@@ -63,7 +63,7 @@ function draw() {
       let handsMiddle = hand.middle_finger_mcp;
 
       noStroke();
-      fill(0, 255, 255);
+      fill(255, 255, 255);
       ellipse(handsMiddle.x, handsMiddle.y, 30);
 
       checkHover(handsMiddle.x, handsMiddle.y);
@@ -181,7 +181,7 @@ function displayingArt(result) {
 //The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
 function weatherAPI(city) {
 
-  let apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
+  let apiUrl = "https://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
 
   fetch(apiUrl)
     .then(response => {
