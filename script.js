@@ -7,7 +7,7 @@ let rects = [
   { x: 750, y: 600, w: 70, h: 70, isTouching: false },
   { x: 500, y: 400, w: 70, h: 70, isTouching: false },
   { x: 1100, y: 200, w: 70, h: 70, isTouching: false },
-  { x: 1100, y: 600, w: 70, h: 70, isTouching: false },
+  { x: 1100, y: 600, w: 70, h: 70, isTouching: false }
 ];
 let synth;
 let soundStarted = false;
@@ -27,6 +27,8 @@ let localTime;
 function preload() {
   handpose = ml5.handPose();
   weatherAPI();
+
+  img = loadImage("/Pilar.png");
 }
 
 function setup() {
@@ -53,6 +55,8 @@ function draw() {
   if (timer < stopTime) {
     timer += deltaTime / 1000;
 
+    image(img, 10, 10);
+
     for (let hand of hands) {
       let handsMiddle = hand.middle_finger_mcp;
 
@@ -67,6 +71,7 @@ function draw() {
     timer = stopTime;
     randomizeScore();
   }
+
   if (hands.length > 0 && !soundStarted) {
     soundStarted = true;
     startSound();
@@ -89,25 +94,26 @@ function startSound() {
     .then(() => {
       synth = new Tone.PolySynth().toDestination();
 
-      Tone.Transport.scheduleRepeat((time) => {
+      Tone.Transport.scheduleRepeat(time => {
         synth.triggerAttackRelease("C3", "8n", time);
       }, "2n");
 
       Tone.Transport.start();
     })
-    .catch((error) => {
+    .catch(error => {
       console.error("Failed to start Tone.js:", error);
     });
 }
 
 function pathTriangle() {
-  fill(255, 255, 0, 150);
+  fill(255, 0, 0, 150);
   noStroke();
   //right hand
   rect(750, 200, 70, 70);
   rect(750, 600, 70, 70);
   rect(500, 400, 70, 70);
 
+  fill(0, 0, 255, 150);
   //left hand
   rect(1100, 200, 70, 70);
   rect(1100, 600, 70, 70);
@@ -123,8 +129,7 @@ function pathTriangle() {
 
 function checkHover(x, y) {
   for (let rect of rects) {
-    let touchingRect =
-      x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
+    let touchingRect = x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
 
     if (touchingRect && !rect.isTouching) {
       points += 1;
@@ -138,17 +143,11 @@ function checkHover(x, y) {
 
 function randomizeScore() {
   if (points >= 0 && points < 1000) {
-    result =
-      Math.floor(
-        Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)
-      ) / 100;
+    result = Math.floor(Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)) / 100;
 
     displayingArt(result);
   } else if (points >= 1000 && points < 2500) {
-    result =
-      Math.floor(
-        Math.abs(Math.sin(points / 100)) + Math.pow(points, 3) / 1000 + 1
-      ) / 100;
+    result = Math.floor(Math.abs(Math.sin(points / 100)) + Math.pow(points, 3) / 1000 + 1) / 100;
 
     displayingArt(result);
   } else if (points >= 2500) {
@@ -179,17 +178,16 @@ function displayingArt(result) {
 
 //The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
 function weatherAPI() {
-  const apiUrl =
-    "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
+  const apiUrl = "http://api.weatherapi.com/v1/current.json?key=e8f06a30dfc14caeb4d112444240710&q=Jönköping&aqi=no";
 
   fetch(apiUrl)
-    .then((response) => {
+    .then(response => {
       if (!response.ok) {
         throw new Error("Network response was ok!");
       }
       return response.json();
     })
-    .then((data) => {
+    .then(data => {
       console.log(data);
       temperature = Math.floor(data.current.temp_c);
       wind = Math.floor(data.current.wind_kph);
@@ -200,18 +198,9 @@ function weatherAPI() {
       heatIndex = Math.floor(data.current.heatindex_c);
       localTime = data.location.localtime_epoch;
 
-      console.log(
-        temperature,
-        wind,
-        humidity,
-        windChill,
-        pressure,
-        cloud,
-        heatIndex,
-        localTime
-      );
+      console.log(temperature, wind, humidity, windChill, pressure, cloud, heatIndex, localTime);
     })
-    .catch((error) => {
+    .catch(error => {
       console.log("Error", error);
     });
 }
@@ -275,12 +264,7 @@ class Agent {
     push();
     stroke(wind * 15, heatIndex * 2, temperature, humidity + 70);
     strokeWeight(heatIndex);
-    line(
-      this.lastPosition.x,
-      this.lastPosition.y,
-      this.position.x,
-      this.position.y
-    );
+    line(this.lastPosition.x, this.lastPosition.y, this.position.x, this.position.y);
     pop();
   }
 }
@@ -292,8 +276,7 @@ function generateField() {
     flowfield.push([]);
     for (let y = 0; y < maxRowsFlowfield; y++) {
       const dividerFlowfield = pressure / 10;
-      const value =
-        noise(x / dividerFlowfield, y / dividerFlowfield) * Math.PI * 2;
+      const value = noise(x / dividerFlowfield, y / dividerFlowfield) * Math.PI * 2;
       flowfield[x].push(p5.Vector.fromAngle(value));
     }
   }
@@ -303,12 +286,7 @@ function generateField() {
 
 function generateAgents() {
   for (let i = 0; i < 500; i++) {
-    let agent = new Agent(
-      Math.random() * innerWidth,
-      Math.random() * innerHeight,
-      2,
-      0.3
-    );
+    let agent = new Agent(Math.random() * innerWidth, Math.random() * innerHeight, 2, 0.3);
     agents.push(agent);
   }
 }
@@ -356,11 +334,7 @@ function noiseArtwork() {
       const c = noise(x / dividerNoise, y / dividerNoise) * humidity;
       const value = noise(x / dividerNoise, y / dividerNoise) * sizeNoise;
       fill(c, wind * 15, heatIndex * 15);
-      ellipse(
-        offsetX + sizeNoise / 2 + x * sizeNoise,
-        offsetY + sizeNoise / 2 + y * sizeNoise,
-        value
-      );
+      ellipse(offsetX + sizeNoise / 2 + x * sizeNoise, offsetY + sizeNoise / 2 + y * sizeNoise, value);
     }
   }
 
