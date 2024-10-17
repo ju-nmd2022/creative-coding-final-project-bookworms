@@ -156,8 +156,10 @@ function displayingArt(result) {
     result > 7000
   ) {
     flowfieldArtwork();
+    console.log("flowfield")
   } else {
     noiseArtwork();
+    console.log("noise")
   }
 }
 
