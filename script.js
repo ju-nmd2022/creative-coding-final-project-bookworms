@@ -7,7 +7,7 @@ let rects = [
   { x: 750, y: 500, w: 70, h: 70, isTouching: false },
   { x: 500, y: 300, w: 70, h: 70, isTouching: false },
   { x: 1100, y: 100, w: 70, h: 70, isTouching: false },
-  { x: 1100, y: 500, w: 70, h: 70, isTouching: false }
+  { x: 1100, y: 500, w: 70, h: 70, isTouching: false },
 ];
 let synth;
 let soundStarted = false;
@@ -93,13 +93,13 @@ function startSound() {
     .then(() => {
       synth = new Tone.PolySynth().toDestination();
 
-      Tone.Transport.scheduleRepeat(time => {
+      Tone.Transport.scheduleRepeat((time) => {
         synth.triggerAttackRelease("C3", "8n", time);
       }, "2n");
 
       Tone.Transport.start();
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Failed to start Tone.js:", error);
     });
 }
@@ -121,7 +121,8 @@ function pathTriangle() {
 function checkHover(x, y) {
   for (let rect of rects) {
     //The following 6 lines of code are done with the help of ChatGPT
-    let touchingRect = x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
+    let touchingRect =
+      x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h;
 
     if (touchingRect && !rect.isTouching) {
       points += 1;
@@ -133,12 +134,18 @@ function checkHover(x, y) {
 }
 
 function randomizeScore() {
-  //The following math equasions were done with the help of ChatGPT
+  //The following math equasions were done with the help of ChatGPT: https://chatgpt.com/share/67c5d91d-0d14-8003-87bd-a74561e86ba6
   if (points >= 0 && points < 1000) {
-    result = Math.floor(Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)) / 100;
+    result =
+      Math.floor(
+        Math.pow(points, 2) + Math.exp(points / 100) - Math.sqrt(points + 1)
+      ) / 100;
     displayingArt(result);
   } else if (points >= 1000 && points < 2500) {
-    result = Math.floor(Math.abs(Math.sin(points / 100)) + Math.pow(points, 3) / 1000 + 1) / 100;
+    result =
+      Math.floor(
+        Math.abs(Math.sin(points / 100)) + Math.pow(points, 3) / 1000 + 1
+      ) / 100;
     displayingArt(result);
   } else if (points >= 2500) {
     result = Math.floor(Math.log(points + 1) + 100 / (points + 1)) / 100;
@@ -156,25 +163,26 @@ function displayingArt(result) {
     result > 7000
   ) {
     flowfieldArtwork();
-    console.log("flowfield")
+    console.log("flowfield");
   } else {
     noiseArtwork();
-    console.log("noise")
+    console.log("noise");
   }
 }
 
 //The following 25 lines of code were conducted with this: https://www.freecodecamp.org/news/make-api-calls-in-javascript/
 function weatherAPI() {
-  let apiUrl = "https://api.weatherapi.com/v1/current.json?key=7b05ca88869f4278895121153241610&q=Jönköping&aqi=no";
+  let apiUrl =
+    "https://api.weatherapi.com/v1/current.json?key=7b05ca88869f4278895121153241610&q=Jönköping&aqi=no";
 
   fetch(apiUrl)
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was ok!");
       }
       return response.json();
     })
-    .then(data => {
+    .then((data) => {
       console.log(data);
       temperature = Math.floor(data.current.temp_c);
       wind = Math.floor(data.current.wind_kph);
@@ -185,7 +193,7 @@ function weatherAPI() {
       heatIndex = Math.floor(data.current.heatindex_c);
       localTime = data.location.localtime_epoch;
     })
-    .catch(error => {
+    .catch((error) => {
       console.log("Error", error);
     });
 }
@@ -245,9 +253,19 @@ class Agent {
 
   draw() {
     push();
-    stroke(wind * random(5, 25), heatIndex * random(5, 10), temperature * random(3, 10), humidity + 70);
+    stroke(
+      wind * random(5, 25),
+      heatIndex * random(5, 10),
+      temperature * random(3, 10),
+      humidity + 70
+    );
     strokeWeight(heatIndex);
-    line(this.lastPosition.x, this.lastPosition.y, this.position.x, this.position.y);
+    line(
+      this.lastPosition.x,
+      this.lastPosition.y,
+      this.position.x,
+      this.position.y
+    );
     pop();
   }
 }
@@ -259,7 +277,8 @@ function generateField() {
     flowfield.push([]);
     for (let y = 0; y < maxRowsFlowfield; y++) {
       const dividerFlowfield = pressure / 10;
-      const value = noise(x / dividerFlowfield, y / dividerFlowfield) * Math.PI * 2;
+      const value =
+        noise(x / dividerFlowfield, y / dividerFlowfield) * Math.PI * 2;
       flowfield[x].push(p5.Vector.fromAngle(value));
     }
   }
@@ -268,7 +287,12 @@ function generateField() {
 
 function generateAgents() {
   for (let i = 0; i < 500; i++) {
-    let agent = new Agent(Math.random() * innerWidth, Math.random() * innerHeight, 2, 0.3);
+    let agent = new Agent(
+      Math.random() * innerWidth,
+      Math.random() * innerHeight,
+      2,
+      0.3
+    );
     agents.push(agent);
   }
 }
@@ -312,7 +336,11 @@ function noiseArtwork() {
       const c = noise(x / dividerNoise, y / dividerNoise) * humidity;
       const value = noise(x / dividerNoise, y / dividerNoise) * sizeNoise;
       fill(c, wind * 15, heatIndex * 15);
-      ellipse(offsetX + sizeNoise / 2 + x * sizeNoise, offsetY + sizeNoise / 2 + y * sizeNoise, value);
+      ellipse(
+        offsetX + sizeNoise / 2 + x * sizeNoise,
+        offsetY + sizeNoise / 2 + y * sizeNoise,
+        value
+      );
     }
   }
 
